@@ -1,62 +1,353 @@
 <!doctype html>
-<html lang="pt">
-  <head>
-    <title>O pôr do sol compartilhado - Paisagens Perdidas</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,500&display=swap" rel="stylesheet">      
-    
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/menu.css">
-    <link rel="stylesheet" href="css/compartilhado.css">
-    
-    <link rel="shortcut icon" href="images/icons/loguinho.png" type="image/x-icon" />
-  </head>
-  <body class="compartilhado-body" id="body-container">
-    
-    <!-- Intro Sequence -->
-    <div id="intro-sequence">
-        <div class="intro-text" id="text1">A cada minuto milhares de pessoas fotografam o pôr do sol.</div>
-        <div class="intro-text" id="text2">As imagens continuam existindo.</div>
-        <div class="intro-text" id="text3">Mas as paisagens talvez não.</div>
+
+<html lang="pt-BR">
+
+<head>
+
+  <title>O pôr do sol compartilhado — Paisagens Perdidas</title>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  >
+
+
+  <!-- =========================================================
+       RUBIK
+  ========================================================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,500&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- =========================================================
+       CSS BASE
+  ========================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
+
+
+  <!-- =========================================================
+       CSS ESPECÍFICO DO COMPARTILHADO
+  ========================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="css/compartilhado.css"
+  >
+
+
+  <!-- =========================================================
+       NAVBAR GLOBAL
+       IMPORTANTE: deixar por último
+  ========================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="css/menu.css"
+  >
+
+
+  <!-- =========================================================
+       FAVICON
+  ========================================================== -->
+
+  <link
+    rel="shortcut icon"
+    href="images/icons/loguinho.png"
+    type="image/x-icon"
+  >
+
+
+  <!-- =========================================================
+       GARANTIA TIPOGRÁFICA
+  ========================================================== -->
+
+  <style>
+
+    body {
+      font-family: 'Rubik', sans-serif;
+    }
+
+  </style>
+
+</head>
+
+
+<body
+  class="compartilhado-body"
+  id="body-container"
+>
+
+
+  <!-- =========================================================
+       INTRO
+  ========================================================== -->
+
+  <div id="intro-sequence">
+
+
+    <div
+      class="intro-text"
+      id="text1"
+    >
+      A cada minuto milhares de pessoas fotografam o pôr do sol.
     </div>
 
-    <!-- Timeline Container -->
-    <div id="timeline-container" style="opacity: 0; pointer-events: none;">
-        <!-- Images will be injected here by JS -->
+
+    <div
+      class="intro-text"
+      id="text2"
+    >
+      As imagens continuam existindo.
     </div>
 
-    <!-- End Sequence -->
-    <div id="end-sequence" style="display: none;">
-        <div class="end-text" id="end-text1">Suas escolhas podem salvar paisagens.</div>
-        <div class="end-text" id="end-text2">E também aqueles que jamais puderam contemplá-las.</div>
+
+    <div
+      class="intro-text"
+      id="text3"
+    >
+      Mas as paisagens talvez não.
     </div>
 
-    <!-- Navigation Menu -->
-    <div class="nav" id="main-nav" style="z-index: 9999;">
-      <input type="checkbox" id="nav-check">
-      <div class="nav-header">
-        <div class="nav-title"><a href="index.html">SOBRE</a></div>
+
+  </div>
+
+
+  <!-- =========================================================
+       TIMELINE
+       As imagens são inseridas pelo JavaScript
+  ========================================================== -->
+
+  <div
+    id="timeline-container"
+    style="
+      opacity: 0;
+      pointer-events: none;
+    "
+  >
+
+    <!--
+      As imagens são carregadas dinamicamente
+      pelo js/compartilhado.js
+    -->
+
+  </div>
+
+
+  <!-- =========================================================
+       SEQUÊNCIA FINAL
+  ========================================================== -->
+
+  <div
+    id="end-sequence"
+    style="display: none;"
+  >
+
+
+    <div
+      class="end-text"
+      id="end-text1"
+    >
+      Suas escolhas podem salvar paisagens.
+    </div>
+
+
+    <div
+      class="end-text"
+      id="end-text2"
+    >
+      E também aqueles que jamais puderam contemplá-las.
+    </div>
+
+
+  </div>
+
+
+  <!-- =========================================================
+       NAVBAR GLOBAL
+  ========================================================== -->
+
+  <div
+    class="nav"
+    id="main-nav"
+  >
+
+
+    <input
+      type="checkbox"
+      id="nav-check"
+    >
+
+
+    <!-- SOBRE -->
+
+    <div class="nav-header">
+
+      <div class="nav-title">
+
+        <a href="sobre.html">
+          SOBRE
+        </a>
+
       </div>
-      <div class="nav-btn">
-        <label for="nav-check">
-          <span></span><span></span><span></span>
-        </label>
-      </div>
-      <div class="nav-links">
-        <a href="bovinos.html" target="_blank"><img class="icons" src="images/icons/cow.png" width="30px" heigth="auto"></a>
-        <a href="galinhas.html" target="_blank"><img class="icons" src="images/icons/chicken.png" width="30px" heigth="auto"></a>
-        <a href="porcos.html" target="_blank"><img class="icons" src="images/icons/pig.png" width="30px" heigth="auto"></a>
-        <a href="cavalos.html" target="_blank"><img class="icons" src="images/icons/horse.png" width="30px" heigth="auto"></a>
-        <a href="coelhos.html" target="_blank"><img class="icons" src="images/icons/rabbit.png" width="30px" heigth="auto"></a>
-        <a href="ovelhas.html" target="_blank"><img class="icons" src="images/icons/sheep.png" width="30px" heigth="auto"></a>
-        <a href="compartilhado.html" style="font-size: 14px; font-family: 'Rubik', sans-serif; font-weight: 500; vertical-align: middle;">COMPARTILHADO</a>
-      </div>
+
     </div>
 
-    <script src="js/compartilhado.js"></script>
-  </body>
+
+    <!-- BOTÃO MOBILE -->
+
+    <div class="nav-btn">
+
+      <label for="nav-check">
+
+        <span></span>
+
+        <span></span>
+
+        <span></span>
+
+      </label>
+
+    </div>
+
+
+    <!-- LINKS -->
+
+    <div class="nav-links">
+
+
+      <a
+        href="bovinos.html"
+        target="_blank"
+        aria-label="Bovinos"
+      >
+
+        <img
+          class="icons"
+          src="images/icons/cow.png"
+          width="30"
+          alt="Bovinos"
+        >
+
+      </a>
+
+
+      <a
+        href="galinhas.html"
+        target="_blank"
+        aria-label="Galinhas"
+      >
+
+        <img
+          class="icons"
+          src="images/icons/chicken.png"
+          width="30"
+          alt="Galinhas"
+        >
+
+      </a>
+
+
+      <a
+        href="porcos.html"
+        target="_blank"
+        aria-label="Porcos"
+      >
+
+        <img
+          class="icons"
+          src="images/icons/pig.png"
+          width="30"
+          alt="Porcos"
+        >
+
+      </a>
+
+
+      <a
+        href="cavalos.html"
+        target="_blank"
+        aria-label="Cavalos"
+      >
+
+        <img
+          class="icons"
+          src="images/icons/horse.png"
+          width="30"
+          alt="Cavalos"
+        >
+
+      </a>
+
+
+      <a
+        href="coelhos.html"
+        target="_blank"
+        aria-label="Coelhos"
+      >
+
+        <img
+          class="icons"
+          src="images/icons/rabbit.png"
+          width="30"
+          alt="Coelhos"
+        >
+
+      </a>
+
+
+      <a
+        href="ovelhas.html"
+        target="_blank"
+        aria-label="Ovelhas"
+      >
+
+        <img
+          class="icons"
+          src="images/icons/sheep.png"
+          width="30"
+          alt="Ovelhas"
+        >
+
+      </a>
+
+
+      <a href="compartilhado.html">
+        COMPARTILHADO
+      </a>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
+
+  <script src="js/compartilhado.js"></script>
+
+
+</body>
+
 </html>
