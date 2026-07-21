@@ -1,107 +1,336 @@
-/* Base styling for the new module */
+/* ============================================================
+   O PÔR DO SOL COMPARTILHADO
+   Paisagens Perdidas
+   ============================================================ */
+
+:root {
+    --darkness: 0;
+}
+
+/* ------------------------------------------------------------
+   BASE
+   ------------------------------------------------------------ */
+
+html {
+    background: #000;
+}
+
 .compartilhado-body {
-    background-color: #fcfcfc; /* Starts light, becomes dark */
-    color: #222;
+    position: relative;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+
+    background-color: #fcfcfc;
+    color: #222;
+
     font-family: 'Rubik', sans-serif;
-    /* transition handled by JS setting style directly for smoother perf */
 }
 
-.compartilhado-body.is-dark {
-    background-color: #000;
+/*
+   CAMADA DE ESCURECIMENTO
+
+   Em vez de escurecer cada fotografia separadamente,
+   uma única camada preta ocupa a tela inteira.
+
+   Isso elimina os "cards cinza" e transforma o escurecimento
+   em um bloco visual contínuo.
+*/
+
+.compartilhado-body::after {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: #000;
+
+    opacity: var(--darkness);
+
+    pointer-events: none;
+
+    z-index: 80;
+
+    will-change: opacity;
 }
 
-/* Intro Sequence */
+
+/* ============================================================
+   INTRO
+   ============================================================ */
+
 #intro-sequence {
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
+
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
     display: flex;
     flex-direction: column;
+
     justify-content: center;
     align-items: center;
+
     background-color: #fcfcfc;
+
     z-index: 100;
-    transition: opacity 3s ease-in-out;
+
+    transition: opacity 2s ease-in-out;
 }
+
 
 .intro-text {
-    opacity: 0;
-    font-size: 1.5rem;
-    font-weight: 300;
-    text-align: center;
-    margin: 20px;
     position: absolute;
-    transition: opacity 3s ease-in-out;
+
+    opacity: 0;
+
+    max-width: 900px;
+
+    padding: 0 30px;
+
+    font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+
+    line-height: 1.5;
+
+    font-weight: 300;
+
+    text-align: center;
+
     color: #333;
+
+    transition: opacity 2s ease-in-out;
 }
 
-/* Timeline Grid */
+
+/* ============================================================
+   TIMELINE
+   ============================================================ */
+
 #timeline-container {
+    position: relative;
+
     width: 100vw;
+
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(300px, 1fr));
+
     gap: 15px;
-    padding: 10vh 20px 50vh 20px; /* space before first image and after last */
-    transition: opacity 3s ease-in-out;
+
+    box-sizing: border-box;
+
+    /*
+       Antes havia 50vh depois das últimas imagens.
+       Isso atrasava muito o encontro com o final.
+    */
+
+    padding:
+        10vh
+        20px
+        12vh
+        20px;
+
+    transition: opacity 2s ease-in-out;
+
+    z-index: 1;
 }
+
 
 .timeline-image-wrapper {
     width: 100%;
-    margin-bottom: 0;
+
     display: flex;
+
     justify-content: center;
+
+    overflow: hidden;
+
+    background: transparent;
 }
+
 
 .timeline-image {
     width: 100%;
     height: 100%;
+
     max-width: 100vw;
-    object-fit: cover;
+
     display: block;
+
+    object-fit: cover;
+
     aspect-ratio: 1 / 1;
-    /* initial filter - will be modified by JS */
-    filter: brightness(1) contrast(1) saturation(1) opacity(1);
-    will-change: filter;
+
+    /*
+       Não escurecemos mais cada imagem individualmente.
+       O desaparecimento acontece através da camada geral.
+    */
+
+    filter: none;
+
+    opacity: 1;
 }
 
-/* End Sequence */
+
+/* ============================================================
+   FINAL
+   ============================================================ */
+
 #end-sequence {
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    display: flex;
+
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    display: none;
+
     flex-direction: column;
+
     justify-content: center;
     align-items: center;
-    background-color: transparent;
+
+    background: #000;
+
     pointer-events: none;
+
     z-index: 200;
 }
 
+
 .end-text {
-    opacity: 0;
-    color: #fff;
-    text-align: center;
     position: absolute;
-    transition: opacity 4s ease-in-out;
-    padding: 0 20px;
+
+    width: min(1100px, calc(100vw - 40px));
+
+    box-sizing: border-box;
+
+    opacity: 0;
+
+    color: #fff;
+
+    text-align: center;
+
+    line-height: 1.15;
+
+    transition: opacity 1.4s ease-in-out;
+
+    text-wrap: balance;
 }
+
+
+/*
+   PRIMEIRA FRASE
+*/
 
 #end-text1 {
-    font-size: 3rem;
-    font-weight: 400;
+    font-size: clamp(
+        1.8rem,
+        4vw,
+        4rem
+    );
+
+    font-weight: 300;
+
+    letter-spacing: -0.025em;
 }
+
+
+/*
+   ÚLTIMA FRASE
+
+   Agora ela é deliberadamente MUITO maior
+   porque é o fechamento conceitual da experiência.
+*/
 
 #end-text2 {
-    font-size: 2rem;
-    font-weight: 300;
-    color: #ddd;
+    max-width: 1200px;
+
+    font-size: clamp(
+        3rem,
+        7vw,
+        7rem
+    );
+
+    font-weight: 500;
+
+    line-height: 1.03;
+
+    letter-spacing: -0.045em;
+
+    color: #fff;
 }
 
-/* Reduced Motion */
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+    #timeline-container {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 6px;
+
+        padding:
+            8vh
+            6px
+            10vh
+            6px;
+    }
+
+
+    .intro-text {
+        padding: 0 24px;
+
+        font-size: 1.25rem;
+    }
+
+
+    #end-text1 {
+        font-size: clamp(
+            1.8rem,
+            8vw,
+            3rem
+        );
+    }
+
+
+    #end-text2 {
+        width: calc(100vw - 32px);
+
+        font-size: clamp(
+            3rem,
+            13vw,
+            5.5rem
+        );
+
+        line-height: 1;
+    }
+}
+
+
+/* ============================================================
+   ACESSIBILIDADE — REDUÇÃO DE MOVIMENTO
+   ============================================================ */
+
 @media (prefers-reduced-motion: reduce) {
-    .intro-text, #intro-sequence, #timeline-container, .end-text, .timeline-image {
+
+    .intro-text,
+    #intro-sequence,
+    #timeline-container,
+    .end-text {
+
         transition-duration: 0.1s !important;
     }
 }
