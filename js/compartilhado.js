@@ -1,183 +1,117 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // =========================================================================
+    // ELEMENTOS DA INTERFACE
+    // =========================================================================
+
     const introSequence = document.getElementById('intro-sequence');
     const text1 = document.getElementById('text1');
     const text2 = document.getElementById('text2');
     const text3 = document.getElementById('text3');
+
     const timelineContainer = document.getElementById('timeline-container');
+
     const mainNav = document.getElementById('main-nav');
+
     const endSequence = document.getElementById('end-sequence');
     const endText1 = document.getElementById('end-text1');
     const endText2 = document.getElementById('end-text2');
 
+
     // =========================================================================
-    // PROVIDER ARCHITECTURE
-    // Each provider fetches images from a different source and normalizes them
-    // into a common format: { id, src, thumb, author, origin, link, description }
+    // CONFIGURAÇÃO GERAL
     // =========================================================================
 
-    const providers = {
+    /*
+     * Número máximo de imagens exibidas na experiência.
+     *
+     * Mantemos um limite para evitar:
+     * - página excessivamente longa;
+     * - scroll interminável;
+     * - excesso de chamadas;
+     * - carregamento pesado em celular.
+     */
 
-        // ----- WIKIMEDIA COMMONS (active) -----
-        wikimedia: {
-            name: 'Wikimedia Commons',
-            enabled: true,
-            async fetch(query, limit) {
-                const searchTerms = query || 'sunset landscape';
+    const MAX_FINAL_IMAGES = 48;
 
-                const url = 'https://commons.wikimedia.org/w/api.php'
-                    + '?action=query'
-                    + '&generator=search'
-                    + '&gsrnamespace=6'
-                    + `&gsrsearch=${encodeURIComponent(searchTerms)}`
-                    + `&gsrlimit=${limit || 30}`
-                    + '&prop=imageinfo'
-                    + '&iiprop=url|extmetadata|size|mime'
-                    + '&iiurlwidth=1200'
-                    + '&format=json'
-                    + '&origin=*';
 
-                const res = await fetch(url);
-                const data = await res.json();
+    /*
+     * Vocabulário internacional.
+     *
+     * A cada nova visita algumas buscas diferentes são sorteadas.
+     *
+     * Isso faz com que "O pôr do sol compartilhado"
+     * seja reconstruído constantemente.
+     */
 
-                if (!data.query || !data.query.pages) {
-                    return [];
-                }
+    const SUNSET_QUERIES = [
 
-                return Object.values(data.query.pages)
-                    .filter(page => {
-                        const info = page.imageinfo && page.imageinfo[0];
+        'sunset',
 
-                        if (!info) return false;
-                        if (!info.mime || !info.mime.startsWith('image/')) return false;
-                        if (info.width < 800) return false;
+        'por do sol',
 
-                        return true;
-                    })
-                    .map(page => {
-                        const info = page.imageinfo[0];
-                        const meta = info.extmetadata || {};
+        'pôr do sol',
 
-                        return {
-                            id: 'wmc_' + page.pageid,
-                            src: info.thumburl || info.url,
-                            fullSrc: info.url,
-                            thumb: info.thumburl || info.url,
-                            author: meta.Artist
-                                ? stripHtml(meta.Artist.value)
-                                : 'Desconhecido',
-                            origin: 'Wikimedia Commons',
-                            link: info.descriptionurl || '',
-                            description: meta.ImageDescription
-                                ? stripHtml(meta.ImageDescription.value)
-                                : (page.title || ''),
-                            license: meta.LicenseShortName
-                                ? meta.LicenseShortName.value
-                                : '',
-                            date: meta.DateTimeOriginal
-                                ? meta.DateTimeOriginal.value
-                                : '',
-                        };
-                    });
-            }
-        },
+        'sunset sky',
 
-        // ----- FLICKR (requires API key) -----
-        flickr: {
-            name: 'Flickr',
-            enabled: false,
-            apiKey: '',
+        'sunset landscape',
 
-            async fetch(query, limit) {
-                if (!this.apiKey) return [];
+        'sunset photography',
 
-                const url = 'https://api.flickr.com/services/rest/'
-                    + '?method=flickr.photos.search'
-                    + `&api_key=${this.apiKey}`
-                    + `&text=${encodeURIComponent(query || 'sunset')}`
-                    + '&sort=interestingness-desc'
-                    + '&content_type=1'
-                    + '&media=photos'
-                    + `&per_page=${limit || 30}`
-                    + '&extras=url_l,url_o,owner_name,description,date_taken,license,geo'
-                    + '&format=json&nojsoncallback=1';
+        'sunset beach',
 
-                const res = await fetch(url);
-                const data = await res.json();
+        'sunset mountains',
 
-                if (!data.photos || !data.photos.photo) {
-                    return [];
-                }
+        'sunset city',
 
-                return data.photos.photo
-                    .filter(p => p.url_l || p.url_o)
-                    .map(p => ({
-                        id: 'flickr_' + p.id,
-                        src: p.url_l || p.url_o,
-                        fullSrc: p.url_o || p.url_l,
-                        thumb: p.url_l || p.url_o,
-                        author: p.ownername || 'Desconhecido',
-                        origin: 'Flickr',
-                        link: `https://www.flickr.com/photos/${p.owner}/${p.id}`,
-                        description:
-                            p.description &&
-                            p.description._content
-                                ? stripHtml(p.description._content)
-                                : p.title || '',
-                        license: p.license || '',
-                        date: p.datetaken || '',
-                    }));
-            }
-        },
+        'golden hour',
 
-        // ----- BLUESKY (public, no key) -----
-        bluesky: {
-            name: 'Bluesky',
-            enabled: false,
+        'atardecer',
 
-            async fetch(query, limit) {
-                return [];
-            }
-        },
+        'tramonto',
 
-        // ----- MASTODON (public, no key) -----
-        mastodon: {
-            name: 'Mastodon',
-            enabled: false,
-            instance: 'https://mastodon.social',
+        'coucher de soleil'
+    ];
 
-            async fetch(query, limit) {
-                return [];
-            }
-        },
 
-        // ----- INSTAGRAM GRAPH API -----
-        instagram: {
-            name: 'Instagram',
-            enabled: false,
-            accessToken: '',
+    /*
+     * Hashtags usadas nas redes sociais.
+     *
+     * IMPORTANTE:
+     * armazenamos sem # porque APIs como Mastodon
+     * esperam apenas o nome da hashtag.
+     */
 
-            async fetch(query, limit) {
-                return [];
-            }
-        },
+    const SUNSET_HASHTAGS = [
 
-        // ----- TIKTOK RESEARCH API -----
-        tiktok: {
-            name: 'TikTok',
-            enabled: false,
+        'sunset',
 
-            async fetch(query, limit) {
-                return [];
-            }
-        },
-    };
+        'pordosol',
+
+        'sunsets',
+
+        'sunsetphotography',
+
+        'sunsetlovers',
+
+        'sunsetsky',
+
+        'goldenhour',
+
+        'atardecer',
+
+        'tramonto',
+
+        'coucherdesoleil'
+    ];
 
 
     // =========================================================================
-    // HELPERS
+    // FUNÇÕES AUXILIARES
     // =========================================================================
 
     function stripHtml(html) {
+
         const tmp = document.createElement('div');
 
         tmp.innerHTML = html;
@@ -187,103 +121,1273 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function clamp01(value) {
-        return Math.max(0, Math.min(1, value));
+
+        return Math.max(
+            0,
+            Math.min(1, value)
+        );
     }
 
 
     function smoothStep(value) {
+
         const t = clamp01(value);
 
         return t * t * (3 - (2 * t));
     }
 
 
-    // =========================================================================
-    // FETCH & RENDER
-    // =========================================================================
+    /*
+     * Embaralhamento Fisher-Yates.
+     *
+     * Melhor do que:
+     *
+     * array.sort(() => Math.random() - 0.5)
+     *
+     * porque produz uma distribuição mais consistente.
+     */
 
-    async function loadImages() {
-        let allImages = [];
+    function shuffleArray(array) {
 
-        for (const key of Object.keys(providers)) {
-            const provider = providers[key];
+        const result = [...array];
 
-            if (!provider.enabled) {
-                continue;
-            }
+        for (
+            let i = result.length - 1;
+            i > 0;
+            i--
+        ) {
 
-            try {
-                const images =
-                    await provider.fetch(
-                        'sunset por do sol',
-                        30
-                    );
-
-                allImages =
-                    allImages.concat(images);
-
-            } catch (err) {
-                console.warn(
-                    `[Provider ${provider.name}] Erro:`,
-                    err
+            const j =
+                Math.floor(
+                    Math.random() * (i + 1)
                 );
-            }
+
+            [
+                result[i],
+                result[j]
+            ] = [
+                result[j],
+                result[i]
+            ];
         }
 
-        // Shuffle for variety
-        allImages =
-            allImages.sort(
-                () => Math.random() - 0.5
-            );
-
-        renderImages(allImages);
+        return result;
     }
 
 
+    /*
+     * Escolhe determinada quantidade
+     * de itens aleatoriamente.
+     */
+
+    function pickRandom(array, amount) {
+
+        return shuffleArray(array)
+            .slice(
+                0,
+                Math.min(amount, array.length)
+            );
+    }
+
+
+    /*
+     * Remove imagens duplicadas.
+     *
+     * Primeiro tenta comparar ID.
+     * Depois URL da imagem.
+     */
+
+    function removeDuplicates(images) {
+
+        const ids = new Set();
+
+        const urls = new Set();
+
+        return images.filter(img => {
+
+            if (!img || !img.src) {
+                return false;
+            }
+
+
+            if (
+                img.id &&
+                ids.has(img.id)
+            ) {
+
+                return false;
+            }
+
+
+            if (
+                urls.has(img.src)
+            ) {
+
+                return false;
+            }
+
+
+            if (img.id) {
+                ids.add(img.id);
+            }
+
+            urls.add(img.src);
+
+
+            return true;
+        });
+    }
+
+
+    /*
+     * Algumas APIs podem ocasionalmente
+     * devolver URLs sem HTTPS.
+     */
+
+    function ensureHttps(url) {
+
+        if (!url) return '';
+
+        if (url.startsWith('//')) {
+
+            return 'https:' + url;
+        }
+
+        return url;
+    }
+
+
+    // =========================================================================
+    // PROVIDERS
+    // =========================================================================
+
+    /*
+     * Todas as fontes devolvem o mesmo formato:
+     *
+     * {
+     *   id,
+     *   src,
+     *   fullSrc,
+     *   thumb,
+     *   author,
+     *   origin,
+     *   link,
+     *   description,
+     *   license,
+     *   date
+     * }
+     */
+
+    const providers = {
+
+
+        // =====================================================================
+        // WIKIMEDIA COMMONS
+        // =====================================================================
+
+        wikimedia: {
+
+            name: 'Wikimedia Commons',
+
+            enabled: true,
+
+
+            async fetch(query, limit = 20) {
+
+                const searchTerms =
+                    query || 'sunset landscape';
+
+
+                const url =
+                    'https://commons.wikimedia.org/w/api.php'
+                    + '?action=query'
+                    + '&generator=search'
+                    + '&gsrnamespace=6'
+                    + `&gsrsearch=${encodeURIComponent(searchTerms)}`
+                    + `&gsrlimit=${limit}`
+                    + '&prop=imageinfo'
+                    + '&iiprop=url|extmetadata|size|mime'
+                    + '&iiurlwidth=1200'
+                    + '&format=json'
+                    + '&origin=*';
+
+
+                const res = await fetch(url);
+
+
+                if (!res.ok) {
+
+                    throw new Error(
+                        `Wikimedia HTTP ${res.status}`
+                    );
+                }
+
+
+                const data = await res.json();
+
+
+                if (
+                    !data.query ||
+                    !data.query.pages
+                ) {
+
+                    return [];
+                }
+
+
+                return Object
+                    .values(data.query.pages)
+
+                    .filter(page => {
+
+                        const info =
+                            page.imageinfo &&
+                            page.imageinfo[0];
+
+
+                        if (!info) {
+                            return false;
+                        }
+
+
+                        if (
+                            !info.mime ||
+                            !info.mime.startsWith('image/')
+                        ) {
+
+                            return false;
+                        }
+
+
+                        /*
+                         * Evita imagens muito pequenas.
+                         */
+
+                        if (
+                            info.width &&
+                            info.width < 700
+                        ) {
+
+                            return false;
+                        }
+
+
+                        return true;
+                    })
+
+
+                    .map(page => {
+
+                        const info =
+                            page.imageinfo[0];
+
+                        const meta =
+                            info.extmetadata || {};
+
+
+                        return {
+
+                            id:
+                                'wmc_' +
+                                page.pageid,
+
+
+                            src:
+                                ensureHttps(
+                                    info.thumburl ||
+                                    info.url
+                                ),
+
+
+                            fullSrc:
+                                ensureHttps(
+                                    info.url
+                                ),
+
+
+                            thumb:
+                                ensureHttps(
+                                    info.thumburl ||
+                                    info.url
+                                ),
+
+
+                            author:
+                                meta.Artist
+                                    ? stripHtml(
+                                        meta.Artist.value
+                                    )
+                                    : 'Desconhecido',
+
+
+                            origin:
+                                'Wikimedia Commons',
+
+
+                            link:
+                                info.descriptionurl || '',
+
+
+                            description:
+                                meta.ImageDescription
+                                    ? stripHtml(
+                                        meta.ImageDescription.value
+                                    )
+                                    : (
+                                        page.title || ''
+                                    ),
+
+
+                            license:
+                                meta.LicenseShortName
+                                    ? meta.LicenseShortName.value
+                                    : '',
+
+
+                            date:
+                                meta.DateTimeOriginal
+                                    ? meta.DateTimeOriginal.value
+                                    : ''
+                        };
+                    });
+            }
+        },
+
+
+        // =====================================================================
+        // BLUESKY
+        // =====================================================================
+
+        /*
+         * Utilizamos a API pública do Bluesky.
+         *
+         * Não existe senha,
+         * token ou chave dentro do frontend.
+         */
+
+        bluesky: {
+
+            name: 'Bluesky',
+
+            enabled: true,
+
+
+            async fetch(query, limit = 20) {
+
+                /*
+                 * Busca textual.
+                 *
+                 * Hashtags funcionam como parte
+                 * da consulta.
+                 */
+
+                const searchQuery =
+                    query.startsWith('#')
+                        ? query
+                        : `#${query}`;
+
+
+                const url =
+                    'https://public.api.bsky.app'
+                    + '/xrpc/app.bsky.feed.searchPosts'
+                    + `?q=${encodeURIComponent(searchQuery)}`
+                    + `&limit=${Math.min(limit, 25)}`
+                    + '&sort=latest';
+
+
+                const res = await fetch(url);
+
+
+                if (!res.ok) {
+
+                    throw new Error(
+                        `Bluesky HTTP ${res.status}`
+                    );
+                }
+
+
+                const data = await res.json();
+
+
+                if (
+                    !data ||
+                    !Array.isArray(data.posts)
+                ) {
+
+                    return [];
+                }
+
+
+                const images = [];
+
+
+                data.posts.forEach(post => {
+
+                    /*
+                     * Posts do Bluesky podem ter diferentes
+                     * tipos de embed.
+                     *
+                     * Aqui nos interessam apenas
+                     * aqueles que contêm imagens.
+                     */
+
+                    const embed =
+                        post.embed || {};
+
+
+                    let postImages = [];
+
+
+                    /*
+                     * app.bsky.embed.images#view
+                     */
+
+                    if (
+                        Array.isArray(embed.images)
+                    ) {
+
+                        postImages =
+                            embed.images;
+                    }
+
+
+                    /*
+                     * Alguns embeds podem aparecer
+                     * dentro de media.
+                     */
+
+                    if (
+                        postImages.length === 0 &&
+                        embed.media &&
+                        Array.isArray(embed.media.images)
+                    ) {
+
+                        postImages =
+                            embed.media.images;
+                    }
+
+
+                    /*
+                     * Construção do link público.
+                     */
+
+                    let postLink = '';
+
+
+                    if (
+                        post.author &&
+                        post.author.handle &&
+                        post.uri
+                    ) {
+
+                        const parts =
+                            post.uri.split('/');
+
+                        const rkey =
+                            parts[
+                                parts.length - 1
+                            ];
+
+
+                        postLink =
+                            `https://bsky.app/profile/`
+                            + `${post.author.handle}`
+                            + `/post/${rkey}`;
+                    }
+
+
+                    postImages.forEach(
+                        (image, index) => {
+
+                            const src =
+                                image.fullsize ||
+                                image.thumb ||
+                                image.url ||
+                                '';
+
+
+                            if (!src) {
+                                return;
+                            }
+
+
+                            images.push({
+
+                                id:
+                                    `bsky_${post.cid || post.uri}_${index}`,
+
+
+                                src:
+                                    ensureHttps(src),
+
+
+                                fullSrc:
+                                    ensureHttps(
+                                        image.fullsize ||
+                                        src
+                                    ),
+
+
+                                thumb:
+                                    ensureHttps(
+                                        image.thumb ||
+                                        src
+                                    ),
+
+
+                                author:
+                                    post.author
+                                        ? (
+                                            post.author
+                                                .displayName
+                                            ||
+                                            post.author
+                                                .handle
+                                            ||
+                                            'Desconhecido'
+                                        )
+                                        : 'Desconhecido',
+
+
+                                origin:
+                                    'Bluesky',
+
+
+                                link:
+                                    postLink,
+
+
+                                description:
+                                    image.alt ||
+                                    (
+                                        post.record &&
+                                        post.record.text
+                                    )
+                                    ||
+                                    '',
+
+
+                                license:
+                                    '',
+
+
+                                date:
+                                    post.indexedAt ||
+                                    (
+                                        post.record &&
+                                        post.record.createdAt
+                                    )
+                                    ||
+                                    ''
+                            });
+                        }
+                    );
+                });
+
+
+                return images;
+            }
+        },
+
+
+        // =====================================================================
+        // MASTODON
+        // =====================================================================
+
+        mastodon: {
+
+            name: 'Mastodon',
+
+            enabled: true,
+
+
+            /*
+             * Podemos futuramente adicionar
+             * mais instâncias.
+             */
+
+            instances: [
+
+                'https://mastodon.social',
+
+                'https://mstdn.social',
+
+                'https://mas.to'
+            ],
+
+
+            async fetch(hashtag, limit = 20) {
+
+                /*
+                 * Escolhe uma instância diferente
+                 * a cada chamada.
+                 */
+
+                const instance =
+                    this.instances[
+                        Math.floor(
+                            Math.random() *
+                            this.instances.length
+                        )
+                    ];
+
+
+                /*
+                 * Mastodon espera hashtag sem #.
+                 */
+
+                const cleanTag =
+                    hashtag.replace('#', '');
+
+
+                const url =
+                    `${instance}`
+                    + `/api/v1/timelines/tag/`
+                    + `${encodeURIComponent(cleanTag)}`
+                    + `?limit=${Math.min(limit, 40)}`
+                    + '&only_media=true';
+
+
+                const res = await fetch(url);
+
+
+                if (!res.ok) {
+
+                    throw new Error(
+                        `Mastodon ${instance} HTTP ${res.status}`
+                    );
+                }
+
+
+                const statuses =
+                    await res.json();
+
+
+                if (
+                    !Array.isArray(statuses)
+                ) {
+
+                    return [];
+                }
+
+
+                const images = [];
+
+
+                statuses.forEach(status => {
+
+                    /*
+                     * Ignoramos boosts duplicados
+                     * usando o status original quando houver.
+                     */
+
+                    const sourceStatus =
+                        status.reblog ||
+                        status;
+
+
+                    const attachments =
+                        sourceStatus.media_attachments ||
+                        [];
+
+
+                    attachments.forEach(
+                        (media, index) => {
+
+                            /*
+                             * Queremos somente imagens.
+                             */
+
+                            if (
+                                media.type !== 'image'
+                            ) {
+
+                                return;
+                            }
+
+
+                            const src =
+                                media.preview_url ||
+                                media.url ||
+                                '';
+
+
+                            if (!src) {
+                                return;
+                            }
+
+
+                            images.push({
+
+                                id:
+                                    `mastodon_${sourceStatus.id}_${index}`,
+
+
+                                src:
+                                    ensureHttps(src),
+
+
+                                fullSrc:
+                                    ensureHttps(
+                                        media.url ||
+                                        src
+                                    ),
+
+
+                                thumb:
+                                    ensureHttps(
+                                        media.preview_url ||
+                                        src
+                                    ),
+
+
+                                author:
+                                    sourceStatus.account
+                                        ? (
+                                            sourceStatus
+                                                .account
+                                                .display_name
+                                            ||
+                                            sourceStatus
+                                                .account
+                                                .acct
+                                            ||
+                                            'Desconhecido'
+                                        )
+                                        : 'Desconhecido',
+
+
+                                origin:
+                                    'Mastodon',
+
+
+                                link:
+                                    sourceStatus.url ||
+                                    '',
+
+
+                                description:
+                                    media.description ||
+                                    stripHtml(
+                                        sourceStatus.content ||
+                                        ''
+                                    ),
+
+
+                                license:
+                                    '',
+
+
+                                date:
+                                    sourceStatus.created_at ||
+                                    ''
+                            });
+                        }
+                    );
+                });
+
+
+                return images;
+            }
+        },
+
+
+        // =====================================================================
+        // FLICKR
+        // =====================================================================
+
+        /*
+         * Continua preparado.
+         *
+         * Não ativamos porque exigiria colocar
+         * uma API key.
+         *
+         * Não devemos publicar uma chave privada
+         * diretamente neste JavaScript.
+         */
+
+        flickr: {
+
+            name: 'Flickr',
+
+            enabled: false,
+
+            apiKey: '',
+
+
+            async fetch(query, limit) {
+
+                if (!this.apiKey) {
+                    return [];
+                }
+
+
+                const url =
+                    'https://api.flickr.com/services/rest/'
+                    + '?method=flickr.photos.search'
+                    + `&api_key=${this.apiKey}`
+                    + `&text=${encodeURIComponent(query || 'sunset')}`
+                    + '&sort=date-posted-desc'
+                    + '&content_type=1'
+                    + '&media=photos'
+                    + `&per_page=${limit || 30}`
+                    + '&extras=url_l,url_o,owner_name,description,date_taken,license,geo'
+                    + '&format=json'
+                    + '&nojsoncallback=1';
+
+
+                const res =
+                    await fetch(url);
+
+
+                const data =
+                    await res.json();
+
+
+                if (
+                    !data.photos ||
+                    !data.photos.photo
+                ) {
+
+                    return [];
+                }
+
+
+                return data.photos.photo
+
+                    .filter(
+                        p =>
+                            p.url_l ||
+                            p.url_o
+                    )
+
+                    .map(p => ({
+
+                        id:
+                            'flickr_' +
+                            p.id,
+
+
+                        src:
+                            p.url_l ||
+                            p.url_o,
+
+
+                        fullSrc:
+                            p.url_o ||
+                            p.url_l,
+
+
+                        thumb:
+                            p.url_l ||
+                            p.url_o,
+
+
+                        author:
+                            p.ownername ||
+                            'Desconhecido',
+
+
+                        origin:
+                            'Flickr',
+
+
+                        link:
+                            `https://www.flickr.com/photos/${p.owner}/${p.id}`,
+
+
+                        description:
+                            p.description &&
+                            p.description._content
+                                ? stripHtml(
+                                    p.description._content
+                                )
+                                : p.title || '',
+
+
+                        license:
+                            p.license || '',
+
+
+                        date:
+                            p.datetaken || ''
+                    }));
+            }
+        },
+
+
+        // =====================================================================
+        // INSTAGRAM
+        // =====================================================================
+
+        instagram: {
+
+            name: 'Instagram',
+
+            enabled: false,
+
+            async fetch() {
+
+                /*
+                 * Mantido desativado.
+                 *
+                 * Instagram exige infraestrutura
+                 * e autenticação apropriadas.
+                 *
+                 * Nunca colocar access token permanente
+                 * diretamente em JavaScript público.
+                 */
+
+                return [];
+            }
+        },
+
+
+        // =====================================================================
+        // TIKTOK
+        // =====================================================================
+
+        tiktok: {
+
+            name: 'TikTok',
+
+            enabled: false,
+
+            async fetch() {
+
+                /*
+                 * Mantido preparado para futura
+                 * integração via backend.
+                 */
+
+                return [];
+            }
+        }
+    };
+
+
+    // =========================================================================
+    // CARREGAMENTO DAS IMAGENS
+    // =========================================================================
+
+    async function loadImages() {
+
+        let allImages = [];
+
+
+        /*
+         * A cada visita escolhemos
+         * três buscas diferentes para Wikimedia.
+         */
+
+        const selectedQueries =
+            pickRandom(
+                SUNSET_QUERIES,
+                3
+            );
+
+
+        /*
+         * Também sorteamos hashtags diferentes
+         * para as redes sociais.
+         */
+
+        const selectedHashtags =
+            pickRandom(
+                SUNSET_HASHTAGS,
+                4
+            );
+
+
+        console.log(
+            '[Paisagens Perdidas] Buscas desta sessão:',
+            selectedQueries
+        );
+
+
+        console.log(
+            '[Paisagens Perdidas] Hashtags desta sessão:',
+            selectedHashtags
+        );
+
+
+        // =====================================================================
+        // WIKIMEDIA
+        // =====================================================================
+
+        if (
+            providers.wikimedia.enabled
+        ) {
+
+            for (
+                const query
+                of selectedQueries
+            ) {
+
+                try {
+
+                    const images =
+                        await providers.wikimedia.fetch(
+                            query,
+                            12
+                        );
+
+
+                    allImages =
+                        allImages.concat(images);
+
+                } catch (err) {
+
+                    console.warn(
+                        '[Wikimedia] Erro:',
+                        err
+                    );
+                }
+            }
+        }
+
+
+        // =====================================================================
+        // BLUESKY
+        // =====================================================================
+
+        if (
+            providers.bluesky.enabled
+        ) {
+
+            for (
+                const hashtag
+                of selectedHashtags
+            ) {
+
+                try {
+
+                    const images =
+                        await providers.bluesky.fetch(
+                            hashtag,
+                            15
+                        );
+
+
+                    allImages =
+                        allImages.concat(images);
+
+                } catch (err) {
+
+                    console.warn(
+                        `[Bluesky #${hashtag}] Erro:`,
+                        err
+                    );
+                }
+            }
+        }
+
+
+        // =====================================================================
+        // MASTODON
+        // =====================================================================
+
+        if (
+            providers.mastodon.enabled
+        ) {
+
+            /*
+             * Usamos três das hashtags sorteadas
+             * para não gerar chamadas demais.
+             */
+
+            for (
+                const hashtag
+                of selectedHashtags.slice(0, 3)
+            ) {
+
+                try {
+
+                    const images =
+                        await providers.mastodon.fetch(
+                            hashtag,
+                            20
+                        );
+
+
+                    allImages =
+                        allImages.concat(images);
+
+                } catch (err) {
+
+                    /*
+                     * Mastodon é federado.
+                     *
+                     * Uma instância pode temporariamente
+                     * bloquear preview público.
+                     *
+                     * Isso NÃO deve quebrar a obra.
+                     */
+
+                    console.warn(
+                        `[Mastodon #${hashtag}] Erro:`,
+                        err
+                    );
+                }
+            }
+        }
+
+
+        // =====================================================================
+        // LIMPEZA
+        // =====================================================================
+
+        /*
+         * Remove URLs repetidas.
+         */
+
+        allImages =
+            removeDuplicates(
+                allImages
+            );
+
+
+        /*
+         * Mistura redes e fontes.
+         */
+
+        allImages =
+            shuffleArray(
+                allImages
+            );
+
+
+        /*
+         * Limita o tamanho final.
+         */
+
+        allImages =
+            allImages.slice(
+                0,
+                MAX_FINAL_IMAGES
+            );
+
+
+        /*
+         * Segurança:
+         *
+         * Wikimedia normalmente garante que
+         * ainda haverá conteúdo caso alguma
+         * rede social falhe.
+         */
+
+        if (
+            allImages.length === 0
+        ) {
+
+            timelineContainer.innerHTML =
+                '<p style="padding:40px;text-align:center;">'
+                + 'As paisagens estão temporariamente silenciosas.'
+                + '</p>';
+
+            return;
+        }
+
+
+        console.log(
+            `[Paisagens Perdidas] ${allImages.length} imagens carregadas.`
+        );
+
+
+        renderImages(
+            allImages
+        );
+    }
+
+
+    // =========================================================================
+    // RENDERIZAÇÃO
+    // =========================================================================
+
     function renderImages(imageList) {
-        timelineContainer.innerHTML = '';
+
+        timelineContainer.innerHTML =
+            '';
+
 
         imageList.forEach(img => {
+
             const wrapper =
-                document.createElement('div');
+                document.createElement(
+                    'div'
+                );
+
 
             wrapper.className =
                 'timeline-image-wrapper';
 
 
             const imgEl =
-                document.createElement('img');
+                document.createElement(
+                    'img'
+                );
+
 
             imgEl.className =
                 'timeline-image';
 
+
             imgEl.src =
                 img.src;
+
 
             imgEl.loading =
                 'lazy';
 
+
+            imgEl.decoding =
+                'async';
+
+
             imgEl.alt =
-                img.description ||
+                img.description
+                ||
                 `Pôr do sol — ${img.origin}`;
+
 
             imgEl.setAttribute(
                 'data-origin',
-                img.origin
+                img.origin || ''
             );
+
 
             imgEl.setAttribute(
                 'data-author',
-                img.author
+                img.author || ''
             );
+
 
             imgEl.setAttribute(
                 'data-id',
-                img.id
+                img.id || ''
             );
 
 
-            wrapper.appendChild(imgEl);
+            /*
+             * Se uma imagem externa falhar,
+             * removemos somente aquele card.
+             *
+             * O restante da timeline continua.
+             */
+
+            imgEl.addEventListener(
+                'error',
+                () => {
+
+                    wrapper.remove();
+                }
+            );
+
+
+            wrapper.appendChild(
+                imgEl
+            );
+
 
             timelineContainer.appendChild(
                 wrapper
@@ -293,82 +1397,130 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =========================================================================
-    // INTRO ANIMATION
+    // INTRO
     // =========================================================================
 
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow =
+        'hidden';
 
 
-    setTimeout(() => {
-        text1.style.opacity = 1;
-    }, 1000);
+    setTimeout(
+        () => {
 
-
-    setTimeout(() => {
-        text1.style.opacity = 0;
-    }, 4000);
-
-
-    setTimeout(() => {
-        text2.style.opacity = 1;
-    }, 5500);
-
-
-    setTimeout(() => {
-        text2.style.opacity = 0;
-    }, 8500);
-
-
-    setTimeout(() => {
-        text3.style.opacity = 1;
-    }, 10000);
-
-
-    setTimeout(() => {
-        text3.style.opacity = 0;
-    }, 13000);
-
-
-    setTimeout(() => {
-
-        introSequence.style.opacity = 0;
-
-
-        setTimeout(() => {
-
-            introSequence.style.display =
-                'none';
-
-            document.body.style.overflow =
-                '';
-
-            timelineContainer.style.opacity =
+            text1.style.opacity =
                 1;
 
-            /*
-             * Recalcula o scroll depois que a intro desaparece.
-             */
-            updateScroll();
+        },
+        1000
+    );
 
-        }, 3000);
 
-    }, 14500);
+    setTimeout(
+        () => {
+
+            text1.style.opacity =
+                0;
+
+        },
+        4000
+    );
+
+
+    setTimeout(
+        () => {
+
+            text2.style.opacity =
+                1;
+
+        },
+        5500
+    );
+
+
+    setTimeout(
+        () => {
+
+            text2.style.opacity =
+                0;
+
+        },
+        8500
+    );
+
+
+    setTimeout(
+        () => {
+
+            text3.style.opacity =
+                1;
+
+        },
+        10000
+    );
+
+
+    setTimeout(
+        () => {
+
+            text3.style.opacity =
+                0;
+
+        },
+        13000
+    );
+
+
+    setTimeout(
+        () => {
+
+            introSequence.style.opacity =
+                0;
+
+
+            setTimeout(
+                () => {
+
+                    introSequence.style.display =
+                        'none';
+
+
+                    document.body.style.overflow =
+                        '';
+
+
+                    timelineContainer.style.opacity =
+                        1;
+
+
+                    updateScroll();
+
+                },
+                3000
+            );
+
+        },
+        14500
+    );
 
 
     // =========================================================================
-    // SCROLL LOGIC
-    //
-    // NOVA LÓGICA:
-    //
-    // - NÃO escurece mais cada imagem separadamente.
-    // - NÃO cria mais aquele efeito de cards cinza.
-    // - Usa uma camada preta única sobre toda a tela.
-    // - Essa camada é controlada pela variável CSS --darkness.
-    // - A frase final entra MUITO antes.
+    // SCROLL
     // =========================================================================
 
-    let isEndTriggered = false;
-    let ticking = false;
+    /*
+     * Mantemos a lógica nova:
+     *
+     * - camada preta única;
+     * - sem cards individualmente cinzas;
+     * - final muito mais cedo.
+     */
+
+    let isEndTriggered =
+        false;
+
+
+    let ticking =
+        false;
 
 
     function updateScroll() {
@@ -385,7 +1537,10 @@ document.addEventListener('DOMContentLoaded', () => {
             window.innerHeight;
 
 
-        if (maxScroll <= 0) {
+        if (
+            maxScroll <= 0
+        ) {
+
             ticking = false;
 
             return;
@@ -393,10 +1548,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         /*
-         * Progresso da página:
-         *
-         * 0 = início
-         * 1 = final
+         * 0 = começo
+         * 1 = fim
          */
 
         const scrollFraction =
@@ -406,16 +1559,13 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
-        // =====================================================
+        // =====================================================================
         // ESCURECIMENTO
-        // =====================================================
+        // =====================================================================
 
         /*
-         * O preto chega a 100%
-         * em aproximadamente 68% da rolagem.
-         *
-         * Portanto não é necessário chegar
-         * quase ao fim da página.
+         * Tela totalmente preta
+         * em aproximadamente 68%.
          */
 
         const DARK_COMPLETE_AT =
@@ -429,23 +1579,11 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
-        /*
-         * Curva suave.
-         *
-         * Evita uma mudança muito seca
-         * nos primeiros pixels.
-         */
-
         const darkness =
             smoothStep(
                 darknessProgress
             );
 
-
-        /*
-         * Essa variável é utilizada
-         * pelo ::after no CSS.
-         */
 
         document.documentElement
             .style
@@ -455,21 +1593,13 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
-        // =====================================================
-        // FINAL
-        // =====================================================
+        // =====================================================================
+        // FRASES FINAIS
+        // =====================================================================
 
         /*
-         * Antes:
-         *
-         * 95% da rolagem
-         * +
-         * 3 segundos
-         * +
-         * 2 segundos
-         *
-         * Agora a sequência começa
-         * aproximadamente em 72%.
+         * A sequência começa aproximadamente
+         * em 72% da rolagem.
          */
 
         const END_TRIGGER_AT =
@@ -478,23 +1608,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (
             scrollFraction >=
-                END_TRIGGER_AT
+            END_TRIGGER_AT
             &&
             !isEndTriggered
         ) {
 
-            isEndTriggered = true;
+            isEndTriggered =
+                true;
+
 
             triggerEndSequence();
         }
 
 
-        ticking = false;
+        ticking =
+            false;
     }
 
 
     // =========================================================================
-    // SCROLL EVENT
+    // EVENTO DE SCROLL
     // =========================================================================
 
     window.addEventListener(
@@ -503,12 +1636,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!ticking) {
 
-                ticking = true;
+                ticking =
+                    true;
 
 
-                window.requestAnimationFrame(
-                    updateScroll
-                );
+                window
+                    .requestAnimationFrame(
+                        updateScroll
+                    );
             }
         },
         {
@@ -518,13 +1653,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =========================================================================
-    // FINAL SEQUENCE
+    // SEQUÊNCIA FINAL
     // =========================================================================
 
     function triggerEndSequence() {
 
         /*
-         * Garante preto absoluto.
+         * Preto absoluto.
          */
 
         document.documentElement
@@ -536,8 +1671,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         /*
-         * Mostra imediatamente
-         * o container final.
+         * Exibe imediatamente
+         * o fundo final.
          */
 
         endSequence.style.display =
@@ -546,57 +1681,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
         /*
          * PRIMEIRA FRASE
-         *
-         * Aparece quase imediatamente.
          */
 
-        window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(
+            () => {
 
-            window.requestAnimationFrame(() => {
+                window.requestAnimationFrame(
+                    () => {
+
+                        endText1.style.opacity =
+                            '1';
+                    }
+                );
+            }
+        );
+
+
+        /*
+         * Sai depois de 3,2 segundos.
+         */
+
+        setTimeout(
+            () => {
 
                 endText1.style.opacity =
+                    '0';
+
+            },
+            3200
+        );
+
+
+        /*
+         * FRASE FINAL
+         */
+
+        setTimeout(
+            () => {
+
+                endText2.style.opacity =
                     '1';
 
-            });
-        });
-
-
-        /*
-         * Primeira frase permanece
-         * aproximadamente 3,2 segundos.
-         */
-
-        setTimeout(() => {
-
-            endText1.style.opacity =
-                '0';
-
-        }, 3200);
-
-
-        /*
-         * Segunda / última frase entra
-         * logo depois.
-         */
-
-        setTimeout(() => {
-
-            endText2.style.opacity =
-                '1';
-
-        }, 4100);
+            },
+            4100
+        );
     }
 
 
     // =========================================================================
-    // RESIZE
+    // REDIMENSIONAMENTO
     // =========================================================================
-
-    /*
-     * Se mudar orientação do celular,
-     * redimensionar browser etc.,
-     * recalculamos.
-     */
 
     window.addEventListener(
         'resize',
@@ -613,7 +1747,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // INIT
     // =========================================================================
 
+    /*
+     * A cada recarregamento:
+     *
+     * 1. novas buscas são sorteadas;
+     * 2. novas hashtags são escolhidas;
+     * 3. APIs são consultadas novamente;
+     * 4. imagens são misturadas;
+     * 5. a timeline é reconstruída.
+     */
+
     loadImages();
 
+
     updateScroll();
+
 });
