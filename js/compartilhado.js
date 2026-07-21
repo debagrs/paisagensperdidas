@@ -23,63 +23,75 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
 
     /*
-     * Número máximo de imagens exibidas na experiência.
+     * Quantidade máxima final.
      *
-     * Mantemos um limite para evitar:
-     * - página excessivamente longa;
-     * - scroll interminável;
-     * - excesso de chamadas;
-     * - carregamento pesado em celular.
+     * Mantemos um limite para:
+     * - não alongar demais a obra;
+     * - melhorar carregamento;
+     * - manter ritmo do scroll.
      */
 
-    const MAX_FINAL_IMAGES = 48;
+    const MAX_FINAL_IMAGES = 42;
 
+
+    // =========================================================================
+    // BUSCAS PARA WIKIMEDIA
+    // =========================================================================
 
     /*
-     * Vocabulário internacional.
+     * Aqui deixamos os termos MUITO mais específicos.
      *
-     * A cada nova visita algumas buscas diferentes são sorteadas.
-     *
-     * Isso faz com que "O pôr do sol compartilhado"
-     * seja reconstruído constantemente.
+     * Evitamos simplesmente "golden hour", por exemplo,
+     * porque pode retornar retratos, arquitetura etc.
      */
 
     const SUNSET_QUERIES = [
 
-        'sunset',
-
-        'por do sol',
-
-        'pôr do sol',
-
-        'sunset sky',
-
         'sunset landscape',
 
-        'sunset photography',
+        'sunset sky landscape',
 
-        'sunset beach',
+        'sunset over ocean',
 
-        'sunset mountains',
+        'sunset over sea',
 
-        'sunset city',
+        'sunset beach landscape',
 
-        'golden hour',
+        'sunset mountains landscape',
 
-        'atardecer',
+        'sunset countryside',
 
-        'tramonto',
+        'sunset horizon',
 
-        'coucher de soleil'
+        'sunset lake landscape',
+
+        'sunset river landscape',
+
+        'sunset city skyline',
+
+        'sunset clouds landscape',
+
+        'sunset nature landscape',
+
+        'por do sol paisagem',
+
+        'atardecer paisaje',
+
+        'tramonto paesaggio',
+
+        'coucher de soleil paysage'
     ];
 
 
+    // =========================================================================
+    // HASHTAGS
+    // =========================================================================
+
     /*
-     * Hashtags usadas nas redes sociais.
+     * Removi hashtags excessivamente genéricas.
      *
-     * IMPORTANTE:
-     * armazenamos sem # porque APIs como Mastodon
-     * esperam apenas o nome da hashtag.
+     * Quanto mais genérica a hashtag,
+     * maior o risco de aparecer conteúdo sem relação visual.
      */
 
     const SUNSET_HASHTAGS = [
@@ -88,21 +100,214 @@ document.addEventListener('DOMContentLoaded', () => {
 
         'pordosol',
 
-        'sunsets',
+        'sunsetsky',
+
+        'sunsetlandscape',
 
         'sunsetphotography',
 
         'sunsetlovers',
 
-        'sunsetsky',
+        'sunsetlover',
 
-        'goldenhour',
+        'sunsetclouds',
+
+        'sunsetbeach',
+
+        'sunsetview',
 
         'atardecer',
 
         'tramonto',
 
         'coucherdesoleil'
+    ];
+
+
+    // =========================================================================
+    // TERMOS POSITIVOS
+    // =========================================================================
+
+    /*
+     * Para aceitar posts sociais,
+     * exigimos pelo menos um termo claramente relacionado
+     * ao pôr do sol.
+     */
+
+    const SUNSET_POSITIVE_TERMS = [
+
+        'sunset',
+
+        '#sunset',
+
+        'sunsets',
+
+        '#sunsets',
+
+        'pôr do sol',
+
+        'por do sol',
+
+        '#pordosol',
+
+        'sunsetsky',
+
+        '#sunsetsky',
+
+        'sunset landscape',
+
+        'sunsetlandscape',
+
+        '#sunsetlandscape',
+
+        'sunset photography',
+
+        'sunsetphotography',
+
+        '#sunsetphotography',
+
+        'sunset beach',
+
+        'sunsetbeach',
+
+        'sunset clouds',
+
+        'sunsetclouds',
+
+        'sunset view',
+
+        'sunsetview',
+
+        'atardecer',
+
+        '#atardecer',
+
+        'tramonto',
+
+        '#tramonto',
+
+        'coucher de soleil',
+
+        'coucherdesoleil',
+
+        '#coucherdesoleil'
+    ];
+
+
+    // =========================================================================
+    // TERMOS NEGATIVOS
+    // =========================================================================
+
+    /*
+     * Isto não pretende "compreender" a imagem.
+     *
+     * É apenas uma barreira adicional para evitar
+     * conteúdos evidentemente fora do universo da obra.
+     */
+
+    const BLOCKED_TERMS = [
+
+        'politic',
+
+        'política',
+
+        'politica',
+
+        'politician',
+
+        'president',
+
+        'presidente',
+
+        'governor',
+
+        'governador',
+
+        'mayor',
+
+        'prefeito',
+
+        'eleição',
+
+        'eleicao',
+
+        'election',
+
+        'campaign',
+
+        'campanha',
+
+        'candidate',
+
+        'candidato',
+
+        'conference',
+
+        'conferência',
+
+        'conferencia',
+
+        'meeting',
+
+        'reunião',
+
+        'reuniao',
+
+        'seminar',
+
+        'seminário',
+
+        'seminario',
+
+        'congress',
+
+        'congresso',
+
+        'speech',
+
+        'discurso',
+
+        'press conference',
+
+        'coletiva de imprensa',
+
+        'interview',
+
+        'entrevista',
+
+        'portrait',
+
+        'retrato',
+
+        'selfie',
+
+        'fashion',
+
+        'moda',
+
+        'model',
+
+        'modelo',
+
+        'concert',
+
+        'show',
+
+        'festival',
+
+        'band',
+
+        'banda',
+
+        'football',
+
+        'futebol',
+
+        'soccer',
+
+        'basketball',
+
+        'baseball'
     ];
 
 
@@ -114,9 +319,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const tmp = document.createElement('div');
 
-        tmp.innerHTML = html;
+        tmp.innerHTML = html || '';
 
         return tmp.textContent || tmp.innerText || '';
+    }
+
+
+    function normalizeText(text) {
+
+        return String(text || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
     }
 
 
@@ -136,16 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return t * t * (3 - (2 * t));
     }
 
-
-    /*
-     * Embaralhamento Fisher-Yates.
-     *
-     * Melhor do que:
-     *
-     * array.sort(() => Math.random() - 0.5)
-     *
-     * porque produz uma distribuição mais consistente.
-     */
 
     function shuffleArray(array) {
 
@@ -175,11 +379,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    /*
-     * Escolhe determinada quantidade
-     * de itens aleatoriamente.
-     */
-
     function pickRandom(array, amount) {
 
         return shuffleArray(array)
@@ -190,22 +389,192 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    function ensureHttps(url) {
+
+        if (!url) return '';
+
+        if (url.startsWith('//')) {
+
+            return 'https:' + url;
+        }
+
+        return url;
+    }
+
+
+    // =========================================================================
+    // VALIDAÇÃO SEMÂNTICA
+    // =========================================================================
+
     /*
-     * Remove imagens duplicadas.
-     *
-     * Primeiro tenta comparar ID.
-     * Depois URL da imagem.
+     * Verifica se o texto contém
+     * alguma referência real a pôr do sol.
      */
+
+    function containsSunsetTerm(text) {
+
+        const normalized =
+            normalizeText(text);
+
+
+        return SUNSET_POSITIVE_TERMS.some(term => {
+
+            return normalized.includes(
+                normalizeText(term)
+            );
+        });
+    }
+
+
+    /*
+     * Verifica se há sinais claros
+     * de conteúdo incompatível.
+     */
+
+    function containsBlockedTerm(text) {
+
+        const normalized =
+            normalizeText(text);
+
+
+        return BLOCKED_TERMS.some(term => {
+
+            return normalized.includes(
+                normalizeText(term)
+            );
+        });
+    }
+
+
+    /*
+     * Verifica proporção da imagem.
+     *
+     * A obra busca PAISAGENS.
+     *
+     * Portanto aceitamos:
+     *
+     * horizontal;
+     * quase quadrada;
+     *
+     * mas rejeitamos retratos claramente verticais.
+     */
+
+    function isLandscapeEnough(width, height) {
+
+        if (!width || !height) {
+
+            /*
+             * Quando a API não informa dimensões,
+             * não rejeitamos automaticamente.
+             */
+
+            return true;
+        }
+
+
+        const ratio =
+            width / height;
+
+
+        /*
+         * 1 = quadrada.
+         *
+         * 0.9 ainda tolera uma pequena verticalidade,
+         * mas elimina retratos muito verticais.
+         */
+
+        return ratio >= 0.9;
+    }
+
+
+    /*
+     * Faz a análise geral da imagem.
+     */
+
+    function isRelevantSunsetImage(image) {
+
+        if (!image || !image.src) {
+
+            return false;
+        }
+
+
+        const combinedText = [
+
+            image.description,
+
+            image.alt,
+
+            image.title,
+
+            image.searchContext,
+
+            image.hashtagContext
+
+        ].filter(Boolean).join(' ');
+
+
+        /*
+         * Precisa conter um termo de pôr do sol.
+         */
+
+        if (
+            !containsSunsetTerm(combinedText)
+        ) {
+
+            return false;
+        }
+
+
+        /*
+         * Não pode ter termos fortemente incompatíveis.
+         */
+
+        if (
+            containsBlockedTerm(combinedText)
+        ) {
+
+            return false;
+        }
+
+
+        /*
+         * Precisa ter proporção compatível
+         * com paisagem.
+         */
+
+        if (
+            !isLandscapeEnough(
+                image.width,
+                image.height
+            )
+        ) {
+
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+    // =========================================================================
+    // REMOÇÃO DE DUPLICADOS
+    // =========================================================================
 
     function removeDuplicates(images) {
 
-        const ids = new Set();
+        const ids =
+            new Set();
 
-        const urls = new Set();
+        const urls =
+            new Set();
+
 
         return images.filter(img => {
 
             if (!img || !img.src) {
+
                 return false;
             }
 
@@ -228,8 +597,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             if (img.id) {
+
                 ids.add(img.id);
             }
+
 
             urls.add(img.src);
 
@@ -239,44 +610,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    /*
-     * Algumas APIs podem ocasionalmente
-     * devolver URLs sem HTTPS.
-     */
-
-    function ensureHttps(url) {
-
-        if (!url) return '';
-
-        if (url.startsWith('//')) {
-
-            return 'https:' + url;
-        }
-
-        return url;
-    }
-
-
     // =========================================================================
     // PROVIDERS
     // =========================================================================
-
-    /*
-     * Todas as fontes devolvem o mesmo formato:
-     *
-     * {
-     *   id,
-     *   src,
-     *   fullSrc,
-     *   thumb,
-     *   author,
-     *   origin,
-     *   link,
-     *   description,
-     *   license,
-     *   date
-     * }
-     */
 
     const providers = {
 
@@ -295,7 +631,8 @@ document.addEventListener('DOMContentLoaded', () => {
             async fetch(query, limit = 20) {
 
                 const searchTerms =
-                    query || 'sunset landscape';
+                    query ||
+                    'sunset landscape';
 
 
                 const url =
@@ -312,7 +649,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     + '&origin=*';
 
 
-                const res = await fetch(url);
+                const res =
+                    await fetch(url);
 
 
                 if (!res.ok) {
@@ -323,7 +661,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
 
-                const data = await res.json();
+                const data =
+                    await res.json();
 
 
                 if (
@@ -346,6 +685,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                         if (!info) {
+
                             return false;
                         }
 
@@ -360,12 +700,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                         /*
-                         * Evita imagens muito pequenas.
+                         * Exclui imagens pequenas.
                          */
 
                         if (
                             info.width &&
-                            info.width < 700
+                            info.width < 800
+                        ) {
+
+                            return false;
+                        }
+
+
+                        /*
+                         * Exclui retratos verticais.
+                         */
+
+                        if (
+                            !isLandscapeEnough(
+                                info.width,
+                                info.height
+                            )
                         ) {
 
                             return false;
@@ -381,8 +736,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         const info =
                             page.imageinfo[0];
 
+
                         const meta =
                             info.extmetadata || {};
+
+
+                        const description =
+                            meta.ImageDescription
+                                ? stripHtml(
+                                    meta.ImageDescription.value
+                                )
+                                : (
+                                    page.title || ''
+                                );
 
 
                         return {
@@ -425,17 +791,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                             link:
-                                info.descriptionurl || '',
+                                info.descriptionurl ||
+                                '',
 
 
                             description:
-                                meta.ImageDescription
-                                    ? stripHtml(
-                                        meta.ImageDescription.value
-                                    )
-                                    : (
-                                        page.title || ''
-                                    ),
+                                description,
+
+
+                            title:
+                                page.title || '',
+
+
+                            /*
+                             * Guardamos a busca usada.
+                             *
+                             * Isso ajuda o filtro semântico.
+                             */
+
+                            searchContext:
+                                query,
 
 
                             license:
@@ -447,9 +822,31 @@ document.addEventListener('DOMContentLoaded', () => {
                             date:
                                 meta.DateTimeOriginal
                                     ? meta.DateTimeOriginal.value
-                                    : ''
+                                    : '',
+
+
+                            width:
+                                info.width ||
+                                null,
+
+
+                            height:
+                                info.height ||
+                                null
                         };
-                    });
+                    })
+
+
+                    /*
+                     * Segunda filtragem.
+                     *
+                     * Só mantém resultados semanticamente
+                     * ligados ao pôr do sol.
+                     */
+
+                    .filter(
+                        isRelevantSunsetImage
+                    );
             }
         },
 
@@ -458,33 +855,28 @@ document.addEventListener('DOMContentLoaded', () => {
         // BLUESKY
         // =====================================================================
 
-        /*
-         * Utilizamos a API pública do Bluesky.
-         *
-         * Não existe senha,
-         * token ou chave dentro do frontend.
-         */
-
         bluesky: {
 
-            name: 'Bluesky',
+            name:
+                'Bluesky',
 
-            enabled: true,
+            enabled:
+                true,
 
 
-            async fetch(query, limit = 20) {
+            async fetch(hashtag, limit = 20) {
+
+                const cleanTag =
+                    String(hashtag || '')
+                        .replace('#', '');
+
 
                 /*
-                 * Busca textual.
-                 *
-                 * Hashtags funcionam como parte
-                 * da consulta.
+                 * Busca pelo termo e pela hashtag.
                  */
 
                 const searchQuery =
-                    query.startsWith('#')
-                        ? query
-                        : `#${query}`;
+                    `#${cleanTag}`;
 
 
                 const url =
@@ -495,7 +887,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     + '&sort=latest';
 
 
-                const res = await fetch(url);
+                const res =
+                    await fetch(url);
 
 
                 if (!res.ok) {
@@ -506,7 +899,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
 
-                const data = await res.json();
+                const data =
+                    await res.json();
 
 
                 if (
@@ -523,27 +917,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 data.posts.forEach(post => {
 
-                    /*
-                     * Posts do Bluesky podem ter diferentes
-                     * tipos de embed.
-                     *
-                     * Aqui nos interessam apenas
-                     * aqueles que contêm imagens.
-                     */
-
                     const embed =
                         post.embed || {};
 
 
-                    let postImages = [];
+                    let postImages =
+                        [];
 
-
-                    /*
-                     * app.bsky.embed.images#view
-                     */
 
                     if (
-                        Array.isArray(embed.images)
+                        Array.isArray(
+                            embed.images
+                        )
                     ) {
 
                         postImages =
@@ -551,15 +936,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
 
-                    /*
-                     * Alguns embeds podem aparecer
-                     * dentro de media.
-                     */
-
                     if (
                         postImages.length === 0 &&
                         embed.media &&
-                        Array.isArray(embed.media.images)
+                        Array.isArray(
+                            embed.media.images
+                        )
                     ) {
 
                         postImages =
@@ -567,11 +949,53 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
 
+                    const postText =
+                        (
+                            post.record &&
+                            post.record.text
+                        )
+                        ||
+                        '';
+
+
                     /*
-                     * Construção do link público.
+                     * PRIMEIRO FILTRO:
+                     *
+                     * o próprio texto do post precisa realmente
+                     * conter referência a pôr do sol.
                      */
 
-                    let postLink = '';
+                    const textForValidation =
+                        `${postText} #${cleanTag}`;
+
+
+                    if (
+                        !containsSunsetTerm(
+                            textForValidation
+                        )
+                    ) {
+
+                        return;
+                    }
+
+
+                    /*
+                     * Bloqueia posts evidentemente
+                     * incompatíveis.
+                     */
+
+                    if (
+                        containsBlockedTerm(
+                            postText
+                        )
+                    ) {
+
+                        return;
+                    }
+
+
+                    let postLink =
+                        '';
 
 
                     if (
@@ -582,6 +1006,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const parts =
                             post.uri.split('/');
+
 
                         const rkey =
                             parts[
@@ -607,11 +1032,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                             if (!src) {
+
                                 return;
                             }
 
 
-                            images.push({
+                            /*
+                             * Bluesky pode fornecer aspectRatio.
+                             */
+
+                            const width =
+                                image.aspectRatio &&
+                                image.aspectRatio.width
+                                    ? image.aspectRatio.width
+                                    : null;
+
+
+                            const height =
+                                image.aspectRatio &&
+                                image.aspectRatio.height
+                                    ? image.aspectRatio.height
+                                    : null;
+
+
+                            /*
+                             * Rejeita retratos verticais.
+                             */
+
+                            if (
+                                !isLandscapeEnough(
+                                    width,
+                                    height
+                                )
+                            ) {
+
+                                return;
+                            }
+
+
+                            const item = {
 
                                 id:
                                     `bsky_${post.cid || post.uri}_${index}`,
@@ -638,11 +1097,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 author:
                                     post.author
                                         ? (
-                                            post.author
-                                                .displayName
+                                            post.author.displayName
                                             ||
-                                            post.author
-                                                .handle
+                                            post.author.handle
                                             ||
                                             'Desconhecido'
                                         )
@@ -659,12 +1116,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 description:
                                     image.alt ||
-                                    (
-                                        post.record &&
-                                        post.record.text
-                                    )
-                                    ||
+                                    postText ||
                                     '',
+
+
+                                alt:
+                                    image.alt ||
+                                    '',
+
+
+                                hashtagContext:
+                                    `#${cleanTag}`,
 
 
                                 license:
@@ -672,14 +1134,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                                 date:
-                                    post.indexedAt ||
+                                    post.indexedAt
+                                    ||
                                     (
                                         post.record &&
                                         post.record.createdAt
                                     )
                                     ||
-                                    ''
-                            });
+                                    '',
+
+
+                                width:
+                                    width,
+
+
+                                height:
+                                    height
+                            };
+
+
+                            /*
+                             * Filtro final.
+                             */
+
+                            if (
+                                isRelevantSunsetImage(
+                                    item
+                                )
+                            ) {
+
+                                images.push(
+                                    item
+                                );
+                            }
                         }
                     );
                 });
@@ -696,15 +1183,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         mastodon: {
 
-            name: 'Mastodon',
+            name:
+                'Mastodon',
 
-            enabled: true,
+            enabled:
+                true,
 
-
-            /*
-             * Podemos futuramente adicionar
-             * mais instâncias.
-             */
 
             instances: [
 
@@ -718,11 +1202,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             async fetch(hashtag, limit = 20) {
 
-                /*
-                 * Escolhe uma instância diferente
-                 * a cada chamada.
-                 */
-
                 const instance =
                     this.instances[
                         Math.floor(
@@ -732,12 +1211,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     ];
 
 
-                /*
-                 * Mastodon espera hashtag sem #.
-                 */
-
                 const cleanTag =
-                    hashtag.replace('#', '');
+                    String(hashtag || '')
+                        .replace('#', '');
 
 
                 const url =
@@ -748,7 +1224,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     + '&only_media=true';
 
 
-                const res = await fetch(url);
+                const res =
+                    await fetch(url);
 
 
                 if (!res.ok) {
@@ -764,26 +1241,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                 if (
-                    !Array.isArray(statuses)
+                    !Array.isArray(
+                        statuses
+                    )
                 ) {
 
                     return [];
                 }
 
 
-                const images = [];
+                const images =
+                    [];
 
 
                 statuses.forEach(status => {
 
-                    /*
-                     * Ignoramos boosts duplicados
-                     * usando o status original quando houver.
-                     */
-
                     const sourceStatus =
                         status.reblog ||
                         status;
+
+
+                    const contentText =
+                        stripHtml(
+                            sourceStatus.content ||
+                            ''
+                        );
+
+
+                    /*
+                     * Mesmo vindo da timeline da hashtag,
+                     * conferimos novamente se há
+                     * vocabulário de pôr do sol.
+                     */
+
+                    const validationText =
+                        `${contentText} #${cleanTag}`;
+
+
+                    if (
+                        !containsSunsetTerm(
+                            validationText
+                        )
+                    ) {
+
+                        return;
+                    }
+
+
+                    /*
+                     * Bloqueia conteúdo incompatível.
+                     */
+
+                    if (
+                        containsBlockedTerm(
+                            contentText
+                        )
+                    ) {
+
+                        return;
+                    }
 
 
                     const attachments =
@@ -794,12 +1310,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     attachments.forEach(
                         (media, index) => {
 
-                            /*
-                             * Queremos somente imagens.
-                             */
-
                             if (
-                                media.type !== 'image'
+                                media.type !==
+                                'image'
                             ) {
 
                                 return;
@@ -813,11 +1326,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                             if (!src) {
+
                                 return;
                             }
 
 
-                            images.push({
+                            /*
+                             * Mastodon fornece metadata
+                             * de dimensões em muitos casos.
+                             */
+
+                            const width =
+                                media.meta &&
+                                media.meta.original &&
+                                media.meta.original.width
+                                    ? media.meta.original.width
+                                    : null;
+
+
+                            const height =
+                                media.meta &&
+                                media.meta.original &&
+                                media.meta.original.height
+                                    ? media.meta.original.height
+                                    : null;
+
+
+                            /*
+                             * Rejeita retratos verticais.
+                             */
+
+                            if (
+                                !isLandscapeEnough(
+                                    width,
+                                    height
+                                )
+                            ) {
+
+                                return;
+                            }
+
+
+                            const item = {
 
                                 id:
                                     `mastodon_${sourceStatus.id}_${index}`,
@@ -867,11 +1417,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                                 description:
+                                    media.description
+                                    ||
+                                    contentText
+                                    ||
+                                    '',
+
+
+                                alt:
                                     media.description ||
-                                    stripHtml(
-                                        sourceStatus.content ||
-                                        ''
-                                    ),
+                                    '',
+
+
+                                hashtagContext:
+                                    `#${cleanTag}`,
 
 
                                 license:
@@ -880,8 +1439,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 date:
                                     sourceStatus.created_at ||
-                                    ''
-                            });
+                                    '',
+
+
+                                width:
+                                    width,
+
+
+                                height:
+                                    height
+                            };
+
+
+                            if (
+                                isRelevantSunsetImage(
+                                    item
+                                )
+                            ) {
+
+                                images.push(
+                                    item
+                                );
+                            }
                         }
                     );
                 });
@@ -896,28 +1475,22 @@ document.addEventListener('DOMContentLoaded', () => {
         // FLICKR
         // =====================================================================
 
-        /*
-         * Continua preparado.
-         *
-         * Não ativamos porque exigiria colocar
-         * uma API key.
-         *
-         * Não devemos publicar uma chave privada
-         * diretamente neste JavaScript.
-         */
-
         flickr: {
 
-            name: 'Flickr',
+            name:
+                'Flickr',
 
-            enabled: false,
+            enabled:
+                false,
 
-            apiKey: '',
+            apiKey:
+                '',
 
 
             async fetch(query, limit) {
 
                 if (!this.apiKey) {
+
                     return [];
                 }
 
@@ -926,7 +1499,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'https://api.flickr.com/services/rest/'
                     + '?method=flickr.photos.search'
                     + `&api_key=${this.apiKey}`
-                    + `&text=${encodeURIComponent(query || 'sunset')}`
+                    + `&text=${encodeURIComponent(query || 'sunset landscape')}`
                     + '&sort=date-posted-desc'
                     + '&content_type=1'
                     + '&media=photos'
@@ -1005,13 +1578,21 @@ document.addEventListener('DOMContentLoaded', () => {
                                 : p.title || '',
 
 
+                        searchContext:
+                            query,
+
+
                         license:
                             p.license || '',
 
 
                         date:
                             p.datetaken || ''
-                    }));
+                    }))
+
+                    .filter(
+                        isRelevantSunsetImage
+                    );
             }
         },
 
@@ -1022,21 +1603,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         instagram: {
 
-            name: 'Instagram',
+            name:
+                'Instagram',
 
-            enabled: false,
+            enabled:
+                false,
+
 
             async fetch() {
-
-                /*
-                 * Mantido desativado.
-                 *
-                 * Instagram exige infraestrutura
-                 * e autenticação apropriadas.
-                 *
-                 * Nunca colocar access token permanente
-                 * diretamente em JavaScript público.
-                 */
 
                 return [];
             }
@@ -1049,16 +1623,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tiktok: {
 
-            name: 'TikTok',
+            name:
+                'TikTok',
 
-            enabled: false,
+            enabled:
+                false,
+
 
             async fetch() {
-
-                /*
-                 * Mantido preparado para futura
-                 * integração via backend.
-                 */
 
                 return [];
             }
@@ -1067,29 +1639,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =========================================================================
-    // CARREGAMENTO DAS IMAGENS
+    // CARREGAMENTO
     // =========================================================================
 
     async function loadImages() {
 
-        let allImages = [];
+        let allImages =
+            [];
 
 
         /*
-         * A cada visita escolhemos
-         * três buscas diferentes para Wikimedia.
+         * Wikimedia:
+         * 4 buscas diferentes por sessão.
          */
 
         const selectedQueries =
             pickRandom(
                 SUNSET_QUERIES,
-                3
+                4
             );
 
 
         /*
-         * Também sorteamos hashtags diferentes
-         * para as redes sociais.
+         * Redes:
+         * escolhemos 4 hashtags.
          */
 
         const selectedHashtags =
@@ -1100,13 +1673,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         console.log(
-            '[Paisagens Perdidas] Buscas desta sessão:',
+            '[Paisagens Perdidas] buscas:',
             selectedQueries
         );
 
 
         console.log(
-            '[Paisagens Perdidas] Hashtags desta sessão:',
+            '[Paisagens Perdidas] hashtags:',
             selectedHashtags
         );
 
@@ -1129,17 +1702,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const images =
                         await providers.wikimedia.fetch(
                             query,
-                            12
+                            15
                         );
 
 
                     allImages =
-                        allImages.concat(images);
+                        allImages.concat(
+                            images
+                        );
 
                 } catch (err) {
 
                     console.warn(
-                        '[Wikimedia] Erro:',
+                        '[Wikimedia] erro:',
                         err
                     );
                 }
@@ -1165,17 +1740,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const images =
                         await providers.bluesky.fetch(
                             hashtag,
-                            15
+                            20
                         );
 
 
                     allImages =
-                        allImages.concat(images);
+                        allImages.concat(
+                            images
+                        );
 
                 } catch (err) {
 
                     console.warn(
-                        `[Bluesky #${hashtag}] Erro:`,
+                        `[Bluesky #${hashtag}] erro:`,
                         err
                     );
                 }
@@ -1191,14 +1768,12 @@ document.addEventListener('DOMContentLoaded', () => {
             providers.mastodon.enabled
         ) {
 
-            /*
-             * Usamos três das hashtags sorteadas
-             * para não gerar chamadas demais.
-             */
-
             for (
                 const hashtag
-                of selectedHashtags.slice(0, 3)
+                of selectedHashtags.slice(
+                    0,
+                    3
+                )
             ) {
 
                 try {
@@ -1206,26 +1781,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const images =
                         await providers.mastodon.fetch(
                             hashtag,
-                            20
+                            25
                         );
 
 
                     allImages =
-                        allImages.concat(images);
+                        allImages.concat(
+                            images
+                        );
 
                 } catch (err) {
 
-                    /*
-                     * Mastodon é federado.
-                     *
-                     * Uma instância pode temporariamente
-                     * bloquear preview público.
-                     *
-                     * Isso NÃO deve quebrar a obra.
-                     */
-
                     console.warn(
-                        `[Mastodon #${hashtag}] Erro:`,
+                        `[Mastodon #${hashtag}] erro:`,
                         err
                     );
                 }
@@ -1234,11 +1802,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         // =====================================================================
-        // LIMPEZA
+        // FILTRAGEM GERAL
         // =====================================================================
 
         /*
-         * Remove URLs repetidas.
+         * Aplicamos novamente o filtro
+         * a TODAS as fontes.
+         */
+
+        allImages =
+            allImages.filter(
+                isRelevantSunsetImage
+            );
+
+
+        /*
+         * Remove duplicadas.
          */
 
         allImages =
@@ -1248,7 +1827,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         /*
-         * Mistura redes e fontes.
+         * Embaralha.
          */
 
         allImages =
@@ -1258,7 +1837,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         /*
-         * Limita o tamanho final.
+         * Limite final.
          */
 
         allImages =
@@ -1268,12 +1847,13 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
+        console.log(
+            `[Paisagens Perdidas] ${allImages.length} imagens aprovadas pela curadoria automática.`
+        );
+
+
         /*
-         * Segurança:
-         *
-         * Wikimedia normalmente garante que
-         * ainda haverá conteúdo caso alguma
-         * rede social falhe.
+         * Fallback.
          */
 
         if (
@@ -1285,13 +1865,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 + 'As paisagens estão temporariamente silenciosas.'
                 + '</p>';
 
+
             return;
         }
-
-
-        console.log(
-            `[Paisagens Perdidas] ${allImages.length} imagens carregadas.`
-        );
 
 
         renderImages(
@@ -1347,7 +1923,7 @@ document.addEventListener('DOMContentLoaded', () => {
             imgEl.alt =
                 img.description
                 ||
-                `Pôr do sol — ${img.origin}`;
+                `Paisagem de pôr do sol — ${img.origin}`;
 
 
             imgEl.setAttribute(
@@ -1369,10 +1945,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             /*
-             * Se uma imagem externa falhar,
-             * removemos somente aquele card.
+             * Imagem externa falhou?
              *
-             * O restante da timeline continua.
+             * Remove somente ela.
              */
 
             imgEl.addEventListener(
@@ -1507,14 +2082,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // SCROLL
     // =========================================================================
 
-    /*
-     * Mantemos a lógica nova:
-     *
-     * - camada preta única;
-     * - sem cards individualmente cinzas;
-     * - final muito mais cedo.
-     */
-
     let isEndTriggered =
         false;
 
@@ -1541,16 +2108,13 @@ document.addEventListener('DOMContentLoaded', () => {
             maxScroll <= 0
         ) {
 
-            ticking = false;
+            ticking =
+                false;
+
 
             return;
         }
 
-
-        /*
-         * 0 = começo
-         * 1 = fim
-         */
 
         const scrollFraction =
             clamp01(
@@ -1562,11 +2126,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // =====================================================================
         // ESCURECIMENTO
         // =====================================================================
-
-        /*
-         * Tela totalmente preta
-         * em aproximadamente 68%.
-         */
 
         const DARK_COMPLETE_AT =
             0.68;
@@ -1594,13 +2153,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         // =====================================================================
-        // FRASES FINAIS
+        // FINAL
         // =====================================================================
-
-        /*
-         * A sequência começa aproximadamente
-         * em 72% da rolagem.
-         */
 
         const END_TRIGGER_AT =
             0.72;
@@ -1640,10 +2194,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     true;
 
 
-                window
-                    .requestAnimationFrame(
-                        updateScroll
-                    );
+                window.requestAnimationFrame(
+                    updateScroll
+                );
             }
         },
         {
@@ -1658,10 +2211,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function triggerEndSequence() {
 
-        /*
-         * Preto absoluto.
-         */
-
         document.documentElement
             .style
             .setProperty(
@@ -1670,18 +2219,9 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
-        /*
-         * Exibe imediatamente
-         * o fundo final.
-         */
-
         endSequence.style.display =
             'flex';
 
-
-        /*
-         * PRIMEIRA FRASE
-         */
 
         window.requestAnimationFrame(
             () => {
@@ -1697,10 +2237,6 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
 
-        /*
-         * Sai depois de 3,2 segundos.
-         */
-
         setTimeout(
             () => {
 
@@ -1711,10 +2247,6 @@ document.addEventListener('DOMContentLoaded', () => {
             3200
         );
 
-
-        /*
-         * FRASE FINAL
-         */
 
         setTimeout(
             () => {
@@ -1729,7 +2261,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =========================================================================
-    // REDIMENSIONAMENTO
+    // RESIZE
     // =========================================================================
 
     window.addEventListener(
@@ -1747,18 +2279,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // INIT
     // =========================================================================
 
-    /*
-     * A cada recarregamento:
-     *
-     * 1. novas buscas são sorteadas;
-     * 2. novas hashtags são escolhidas;
-     * 3. APIs são consultadas novamente;
-     * 4. imagens são misturadas;
-     * 5. a timeline é reconstruída.
-     */
-
     loadImages();
-
 
     updateScroll();
 
