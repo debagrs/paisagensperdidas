@@ -1,30 +1,50 @@
+/* ============================================================
+   PAISAGENS PERDIDAS
+   NAVBAR GLOBAL
+
+   Tipografia: Rubik
+   Paleta:
+   rosa pôr do sol  = #C85A78
+   ocre pôr do sol  = #D89A3D
+   ============================================================ */
+
 
 /* ============================================================
-   NAVBAR
+   VARIÁVEIS
    ============================================================ */
 
 :root {
   --sunset-pink: #C85A78;
   --sunset-ochre: #D89A3D;
+  --nav-background: #000000;
+  --nav-text: #EFEFEF;
 }
 
 
 /* ============================================================
-   ESTRUTURA PRINCIPAL
+   NAVBAR PRINCIPAL
    ============================================================ */
 
 .nav {
   height: 60px;
   width: 100%;
 
-  background-color: #000000;
+  background-color: var(--nav-background);
 
   position: fixed;
-  bottom: 0px;
 
-  z-index: 1;
+  left: 0;
+  bottom: 0;
+
+  z-index: 1000;
+
+  font-family: 'Rubik', sans-serif;
 }
 
+
+/* ============================================================
+   CABEÇALHO / SOBRE
+   ============================================================ */
 
 .nav > .nav-header {
   display: inline;
@@ -34,46 +54,102 @@
 .nav > .nav-header > .nav-title {
   display: inline-block;
 
+  padding: 15px;
+
+  font-family: 'Rubik', sans-serif;
+
   font-size: 22px;
 
-  color: #ffffff;
+  font-weight: 500;
 
-  padding: 15px 15px 15px 15px;
+  line-height: 1.35;
+
+  color: #FFFFFF;
 }
 
+
+/* Link SOBRE */
+
+.nav > .nav-header > .nav-title > a {
+  color: #FFFFFF;
+
+  font-family: 'Rubik', sans-serif;
+
+  font-size: inherit;
+
+  font-weight: 500;
+
+  text-decoration: none;
+
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+
+/* Hover SOBRE */
+
+.nav > .nav-header > .nav-title > a:hover {
+  color: var(--sunset-pink);
+}
+
+
+/* ============================================================
+   BOTÃO MOBILE
+   ============================================================ */
 
 .nav > .nav-btn {
   display: none;
 }
 
 
+/* ============================================================
+   LINKS PRINCIPAIS
+   ============================================================ */
+
 .nav > .nav-links {
   display: inline;
 
   float: right;
 
+  font-family: 'Rubik', sans-serif;
+
   font-size: 18px;
 }
 
 
-/* ============================================================
-   LINKS
-   ============================================================ */
+/* Cada link */
 
 .nav > .nav-links > a {
   display: inline-flex;
 
   align-items: center;
 
+  justify-content: center;
+
   gap: 6px;
 
-  padding: 13px 10px 13px 10px;
+  min-height: 60px;
+
+  padding:
+    13px
+    10px;
+
+  color: var(--nav-text);
+
+  background-color: transparent;
+
+  font-family: 'Rubik', sans-serif;
+
+  font-size: 18px;
+
+  font-weight: 400;
+
+  line-height: 1;
 
   text-decoration: none;
 
-  color: #efefef;
-
-  background-color: transparent;
+  vertical-align: middle;
 
   transition:
     color 0.3s ease,
@@ -83,7 +159,29 @@
 
 
 /* ============================================================
-   ÍCONES
+   ÍCONES PNG
+   ============================================================ */
+
+.nav > .nav-links > a img,
+.nav > .nav-links > a .icons {
+  display: block;
+
+  width: 30px;
+
+  height: auto;
+
+  object-fit: contain;
+
+  transition:
+    filter 0.3s ease,
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+
+/* ============================================================
+   SVG / ÍCONES DE FONTE
+   CASO SEJAM USADOS FUTURAMENTE
    ============================================================ */
 
 .nav > .nav-links > a svg,
@@ -98,24 +196,9 @@
 }
 
 
-/*
-   Caso os SVGs usem stroke/fill diretamente.
-*/
-
-.nav > .nav-links > a svg path,
-.nav > .nav-links > a svg circle,
-.nav > .nav-links > a svg line,
-.nav > .nav-links > a svg polyline,
-.nav > .nav-links > a svg polygon,
-.nav > .nav-links > a svg rect {
-  transition:
-    fill 0.3s ease,
-    stroke 0.3s ease;
-}
-
-
 /* ============================================================
-   HOVER — ITENS ÍMPARES = ROSA
+   HOVER — ITENS ÍMPARES
+   ROSA
    ============================================================ */
 
 .nav > .nav-links > a:nth-child(odd):hover {
@@ -127,6 +210,34 @@
 }
 
 
+/* PNG */
+
+.nav > .nav-links > a:nth-child(odd):hover img,
+.nav > .nav-links > a:nth-child(odd):hover .icons {
+  /*
+     Como os ícones são PNG,
+     não podemos usar fill/stroke.
+
+     O filtro aproxima a imagem
+     da tonalidade rosa.
+  */
+
+  filter:
+    brightness(0)
+    saturate(100%)
+    invert(47%)
+    sepia(27%)
+    saturate(1367%)
+    hue-rotate(297deg)
+    brightness(91%)
+    contrast(87%);
+
+  transform: translateY(-2px);
+}
+
+
+/* SVG */
+
 .nav > .nav-links > a:nth-child(odd):hover svg,
 .nav > .nav-links > a:nth-child(odd):hover i {
   color: var(--sunset-pink);
@@ -135,12 +246,13 @@
 
   stroke: var(--sunset-pink);
 
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 
 /* ============================================================
-   HOVER — ITENS PARES = OCRE
+   HOVER — ITENS PARES
+   OCRE
    ============================================================ */
 
 .nav > .nav-links > a:nth-child(even):hover {
@@ -152,6 +264,30 @@
 }
 
 
+/* PNG */
+
+.nav > .nav-links > a:nth-child(even):hover img,
+.nav > .nav-links > a:nth-child(even):hover .icons {
+  /*
+     Aproximação do ocre #D89A3D.
+  */
+
+  filter:
+    brightness(0)
+    saturate(100%)
+    invert(68%)
+    sepia(52%)
+    saturate(884%)
+    hue-rotate(350deg)
+    brightness(91%)
+    contrast(86%);
+
+  transform: translateY(-2px);
+}
+
+
+/* SVG */
+
 .nav > .nav-links > a:nth-child(even):hover svg,
 .nav > .nav-links > a:nth-child(even):hover i {
   color: var(--sunset-ochre);
@@ -160,7 +296,25 @@
 
   stroke: var(--sunset-ochre);
 
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+}
+
+
+/* ============================================================
+   COMPARTILHADO
+
+   Caso ainda exista style inline no HTML,
+   estas regras mantêm a identidade.
+   ============================================================ */
+
+.nav > .nav-links > a:last-child {
+  font-family: 'Rubik', sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.01em;
 }
 
 
@@ -168,8 +322,11 @@
    FOCO POR TECLADO
    ============================================================ */
 
-.nav > .nav-links > a:focus-visible {
-  outline: 2px solid var(--sunset-ochre);
+.nav > .nav-links > a:focus-visible,
+.nav > .nav-header > .nav-title > a:focus-visible {
+  outline:
+    2px solid
+    var(--sunset-ochre);
 
   outline-offset: 4px;
 
@@ -178,7 +335,7 @@
 
 
 /* ============================================================
-   CHECKBOX
+   CHECKBOX DO MENU
    ============================================================ */
 
 .nav > #nav-check {
@@ -192,21 +349,28 @@
 
 @media (max-width: 600px) {
 
+
+  /* ----------------------------------------------------------
+     BOTÃO HAMBÚRGUER
+     ---------------------------------------------------------- */
+
   .nav > .nav-btn {
     display: inline-block;
 
     position: fixed;
 
     right: 10%;
-    bottom: 0px;
+    bottom: 0;
+
+    z-index: 1001;
   }
 
 
   .nav > .nav-btn > label {
     display: inline-block;
 
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
 
     padding: 13px;
 
@@ -219,9 +383,17 @@
 
   .nav > .nav-btn > label:hover,
   .nav #nav-check:checked ~ .nav-btn > label {
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color:
+      rgba(
+        255,
+        255,
+        255,
+        0.06
+      );
   }
 
+
+  /* Linhas do hambúrguer */
 
   .nav > .nav-btn > label > span {
     display: block;
@@ -229,68 +401,103 @@
     width: 25px;
     height: 10px;
 
-    border-top: 2px solid #eeeeee;
+    border-top:
+      2px solid
+      #EEEEEE;
 
     transition:
       border-color 0.3s ease;
   }
 
 
-  /*
-     Hover do menu hambúrguer
-     usando o ocre do pôr do sol.
-  */
-
   .nav > .nav-btn > label:hover > span {
-    border-color: var(--sunset-ochre);
+    border-color:
+      var(--sunset-ochre);
   }
 
+
+  /* ----------------------------------------------------------
+     PAINEL DE LINKS
+     ---------------------------------------------------------- */
 
   .nav > .nav-links {
     position: absolute;
 
     display: block;
 
-    width: 22%;
+    width: 32%;
 
-    background-color: #000000;
+    min-width: 145px;
 
-    height: 0px;
+    height: 0;
 
-    transition: all 0.3s ease-in;
+    right: 0;
+
+    bottom: 50px;
 
     overflow-y: hidden;
 
-    right: 0px;
+    background-color:
+      var(--nav-background);
 
-    bottom: 50px;
+    font-family:
+      'Rubik',
+      sans-serif;
+
+    transition:
+      height 0.3s ease-in;
   }
 
+
+  /* Cada link mobile */
 
   .nav > .nav-links > a {
     display: flex;
 
     align-items: center;
 
+    justify-content: flex-start;
+
     width: 100%;
 
-    margin-left: 15%;
+    min-height: 52px;
 
-    padding-top: 13px;
-    padding-bottom: 13px;
+    margin-left: 0;
+
+    padding:
+      11px
+      18px;
+
+    font-family:
+      'Rubik',
+      sans-serif;
   }
 
+
+  /* ----------------------------------------------------------
+     MENU FECHADO
+     ---------------------------------------------------------- */
 
   .nav > #nav-check:not(:checked) ~ .nav-links {
-    height: 0px;
+    height: 0;
   }
 
+
+  /* ----------------------------------------------------------
+     MENU ABERTO
+     ---------------------------------------------------------- */
 
   .nav > #nav-check:checked ~ .nav-links {
-    height: calc(100vh - 50px);
+    height:
+      calc(
+        100vh - 50px
+      );
 
-    overflow-y: auto;
+    overflow-y:
+      auto;
   }
+
+
 }
 
 
@@ -300,14 +507,25 @@
 
 @media (prefers-reduced-motion: reduce) {
 
+  .nav > .nav-header > .nav-title > a,
+
   .nav > .nav-links > a,
+
+  .nav > .nav-links > a img,
+
+  .nav > .nav-links > a .icons,
+
   .nav > .nav-links > a svg,
+
   .nav > .nav-links > a i,
+
   .nav > .nav-btn > label,
+
   .nav > .nav-btn > label > span {
 
     transition: none;
 
     transform: none;
   }
+
 }
