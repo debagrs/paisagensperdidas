@@ -1,132 +1,1041 @@
 <!doctype html>
-<html lang="pt">
-  <head>
-  	<title>Paisagens Perdidas</title>
+
+<html lang="pt-BR">
+
+<head>
+
+    <title>Sobre — O pôr do sol das paisagens perdidas</title>
+
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,500&display=swap" rel="stylesheet">      
-	<link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/menu.css">
-<link rel="shortcut icon" href="images/icons/loguinho.png" type="image/x-icon" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
 
 
-     
+    <!-- =========================================================
+         FONTE
+    ========================================================== -->
 
-  </head>
-  <body>
-      
-      
-       <div class="nav">
-  <input type="checkbox" id="nav-check">
-  <div class="nav-header">
-    <div class="nav-title"><a href="index.html">
-SOBRE  </a>  </div>
-  </div>
-  <div class="nav-btn">
-    <label for="nav-check">
-      <span></span>
-      <span></span>
-      <span></span>
-    </label>
-  </div>
-  
-  <div class="nav-links">
-    <a href="bovinos.html" target="_blank"><img class="icons" src="images/icons/cow.png" width="30px"heigth="auto";></a>
-    <a href="galinhas.html" target="_blank"><img class="icons" src="images/icons/chicken.png" width="30px"heigth="auto";></a>
-    <a href="porcos.html" target="_blank"><img class="icons" src="images/icons/pig.png" width="30px"heigth="auto";></a>
-    <a href="cavalos.html" target="_blank"><img class="icons" src="images/icons/horse.png" width="30px"heigth="auto";></a>
-    <a href="coelhos.html" target="_blank"><img class="icons" src="images/icons/rabbit.png" width="30px"heigth="auto";></a>
-    <a href="ovelhas.html" target="_blank"><img class="icons" src="images/icons/sheep.png" width="30px"heigth="auto";></a>
-    <a href="compartilhado.html" style="font-size: 14px; font-family: 'Rubik', sans-serif; font-weight: 500; vertical-align: middle;">COMPARTILHADO</a>
-  </div>
-                </div>
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
-      
-		<div class="home-slider owl-carousel js-fullheight">
-      <div class="slider-item js-fullheight" style="background-image:url(images/d.jpg);">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
-	          <div class="col-md-12 ftco-animate">
-	          	<div class="text w-100 text-center">
-	          		<h2>o pôr do sol das</h2>
-		            <h1 class="mb-3">PAISAGENS PERDIDAS</h1>
-	            </div>
-	          </div>
-	        </div>
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,500&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================================
+         CSS EXISTENTE
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/menu.css"
+    >
+
+
+    <!-- =========================================================
+         FAVICON
+    ========================================================== -->
+
+    <link
+        rel="shortcut icon"
+        href="images/icons/loguinho.png"
+        type="image/x-icon"
+    >
+
+
+    <!-- =========================================================
+         CSS ESPECÍFICO DA PÁGINA SOBRE
+    ========================================================== -->
+
+    <style>
+
+        /* ========================================================
+           CONFIGURAÇÃO
+        ======================================================== */
+
+        :root {
+
+            --sunset-pink: #C85A78;
+
+            --sunset-ochre: #D89A3D;
+
+            --text-color: #ffffff;
+
+        }
+
+
+        * {
+
+            box-sizing: border-box;
+
+        }
+
+
+        html,
+        body {
+
+            margin: 0;
+
+            padding: 0;
+
+            min-height: 100%;
+
+        }
+
+
+        body {
+
+            font-family:
+                'Rubik',
+                sans-serif;
+
+            color:
+                var(--text-color);
+
+            background:
+                #000000;
+
+        }
+
+
+
+        /* ========================================================
+           PAISAGEM FIXA
+        ======================================================== */
+
+        .sobre-background {
+
+            position: fixed;
+
+            inset: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background-image:
+                url('images/c.jpg');
+
+            background-size:
+                cover;
+
+            background-position:
+                center center;
+
+            background-repeat:
+                no-repeat;
+
+            z-index:
+                -3;
+
+        }
+
+
+
+        /* ========================================================
+           OVERLAY
+           
+           Gradiente em vez de caixa preta.
+        ======================================================== */
+
+        .sobre-background::after {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+
+                linear-gradient(
+                    90deg,
+
+                    rgba(0, 0, 0, 0.88) 0%,
+
+                    rgba(0, 0, 0, 0.74) 32%,
+
+                    rgba(0, 0, 0, 0.48) 60%,
+
+                    rgba(0, 0, 0, 0.22) 100%
+                );
+
+        }
+
+
+
+        /* ========================================================
+           CONTEÚDO
+        ======================================================== */
+
+        .sobre-page {
+
+            min-height:
+                100vh;
+
+            padding:
+
+                10vh
+
+                8vw
+
+                130px
+
+                8vw;
+
+        }
+
+
+        .sobre-content {
+
+            width:
+                min(760px, 100%);
+
+        }
+
+
+
+        /* ========================================================
+           IDENTIFICAÇÃO
+        ======================================================== */
+
+        .sobre-label {
+
+            display:
+                inline-block;
+
+            margin-bottom:
+                24px;
+
+            color:
+                var(--sunset-ochre);
+
+            font-size:
+                0.78rem;
+
+            font-weight:
+                600;
+
+            letter-spacing:
+                0.18em;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+
+        /* ========================================================
+           TÍTULO
+        ======================================================== */
+
+        .sobre-title {
+
+            margin:
+                0;
+
+            max-width:
+                760px;
+
+            font-size:
+                clamp(
+                    3.2rem,
+                    7vw,
+                    7.2rem
+                );
+
+            font-weight:
+                500;
+
+            line-height:
+                0.93;
+
+            letter-spacing:
+                -0.055em;
+
+        }
+
+
+        .sobre-title span {
+
+            display:
+                block;
+
+            color:
+                var(--sunset-pink);
+
+        }
+
+
+
+        /* ========================================================
+           DATA
+        ======================================================== */
+
+        .sobre-date {
+
+            margin-top:
+                24px;
+
+            margin-bottom:
+                70px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.72
+                );
+
+            font-size:
+                0.95rem;
+
+            font-weight:
+                400;
+
+            letter-spacing:
+                0.12em;
+
+        }
+
+
+
+        /* ========================================================
+           TEXTO
+        ======================================================== */
+
+        .sobre-text {
+
+            max-width:
+                700px;
+
+        }
+
+
+        .sobre-text p {
+
+            margin:
+
+                0
+
+                0
+
+                28px
+
+                0;
+
+            font-size:
+                clamp(
+                    1.05rem,
+                    1.45vw,
+                    1.3rem
+                );
+
+            font-weight:
+                300;
+
+            line-height:
+                1.75;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.94
+                );
+
+        }
+
+
+
+        /* ========================================================
+           DESTAQUE
+        ======================================================== */
+
+        .sobre-highlight {
+
+            margin:
+
+                60px
+
+                0;
+
+            padding-left:
+                25px;
+
+            border-left:
+                3px solid
+                var(--sunset-pink);
+
+        }
+
+
+        .sobre-highlight p {
+
+            margin:
+                0;
+
+            font-size:
+                clamp(
+                    1.35rem,
+                    2vw,
+                    1.8rem
+                );
+
+            line-height:
+                1.5;
+
+            font-weight:
+                400;
+
+        }
+
+
+
+        /* ========================================================
+           LINKS
+        ======================================================== */
+
+        .sobre-link {
+
+            color:
+                var(--sunset-ochre);
+
+            text-decoration:
+                none;
+
+            border-bottom:
+                1px solid
+                currentColor;
+
+            transition:
+
+                color 0.25s ease,
+
+                border-color 0.25s ease;
+
+        }
+
+
+        .sobre-link:hover {
+
+            color:
+                var(--sunset-pink);
+
+        }
+
+
+
+        /* ========================================================
+           AÇÕES
+        ======================================================== */
+
+        .sobre-actions {
+
+            display:
+                flex;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                16px;
+
+            margin-top:
+                55px;
+
+            margin-bottom:
+                30px;
+
+        }
+
+
+        .sobre-button {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            min-height:
+                48px;
+
+            padding:
+                0 22px;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.5
+                );
+
+            border-radius:
+                100px;
+
+            color:
+                #ffffff;
+
+            text-decoration:
+                none;
+
+            font-size:
+                0.88rem;
+
+            font-weight:
+                500;
+
+            transition:
+
+                color 0.25s ease,
+
+                background-color 0.25s ease,
+
+                border-color 0.25s ease,
+
+                transform 0.25s ease;
+
+        }
+
+
+        .sobre-button:hover {
+
+            color:
+                #000000;
+
+            background-color:
+                var(--sunset-ochre);
+
+            border-color:
+                var(--sunset-ochre);
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+
+        /* ========================================================
+           VOLTAR
+        ======================================================== */
+
+        .sobre-back {
+
+            display:
+                inline-block;
+
+            margin-top:
+                50px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.72
+                );
+
+            font-size:
+                0.9rem;
+
+            text-decoration:
+                none;
+
+            transition:
+                color 0.25s ease;
+
+        }
+
+
+        .sobre-back:hover {
+
+            color:
+                var(--sunset-pink);
+
+        }
+
+
+
+        /* ========================================================
+           MOBILE
+        ======================================================== */
+
+        @media (
+            max-width: 700px
+        ) {
+
+            .sobre-background {
+
+                background-position:
+                    62% center;
+
+            }
+
+
+            .sobre-background::after {
+
+                background:
+
+                    linear-gradient(
+                        180deg,
+
+                        rgba(
+                            0,
+                            0,
+                            0,
+                            0.68
+                        )
+                        0%,
+
+                        rgba(
+                            0,
+                            0,
+                            0,
+                            0.86
+                        )
+                        48%,
+
+                        rgba(
+                            0,
+                            0,
+                            0,
+                            0.97
+                        )
+                        100%
+                    );
+
+            }
+
+
+            .sobre-page {
+
+                padding:
+
+                    10vh
+
+                    24px
+
+                    120px
+
+                    24px;
+
+            }
+
+
+            .sobre-title {
+
+                font-size:
+                    clamp(
+                        3rem,
+                        14vw,
+                        5rem
+                    );
+
+            }
+
+
+            .sobre-date {
+
+                margin-bottom:
+                    48px;
+
+            }
+
+
+            .sobre-highlight {
+
+                margin:
+
+                    45px
+
+                    0;
+
+            }
+
+
+            .sobre-actions {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+
+            }
+
+        }
+
+
+
+        /* ========================================================
+           ACESSIBILIDADE
+        ======================================================== */
+
+        @media (
+            prefers-reduced-motion: reduce
+        ) {
+
+            .sobre-link,
+            .sobre-button,
+            .sobre-back {
+
+                transition:
+                    none;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+    <!-- =========================================================
+         PAISAGEM
+    ========================================================== -->
+
+    <div
+        class="sobre-background"
+        aria-hidden="true"
+    ></div>
+
+
+
+    <!-- =========================================================
+         NAVBAR
+    ========================================================== -->
+
+    <div class="nav">
+
+
+        <input
+            type="checkbox"
+            id="nav-check"
+        >
+
+
+        <div class="nav-header">
+
+            <div class="nav-title">
+
+                <a href="index.html">
+                    SOBRE
+                </a>
+
+            </div>
+
         </div>
-      </div>
 
 
-      <div class="slider-item js-fullheight" style="background-image:url(images/10.jpg);">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
-	<div class="text w-100 text-center">
+        <div class="nav-btn">
 
-	          		<h1>Sobre</h1>
-                  
-		            <h4 >Mudam os governos, mas o abolicionismo animal continua à margem das discussões. A criação de animais para o abate é um dos principais problemas da crise ambiental que vivemos, assim como das crises sanitárias. O confinamento e a exploração de vidas sencientes e o seu pôr do sol são enfatizados neste trabalho, que busca compreender o funcionamento do olho de vacas, porcos, galinhas, ovelhas, coelhos e cavalos e simula o seu modo de ver a paisagem.</h4>
-                        </div>
-	        </div>
+            <label for="nav-check">
+
+                <span></span>
+
+                <span></span>
+
+                <span></span>
+
+            </label>
+
         </div>
-      </div>
-               <div class="slider-item js-fullheight" style="background-image:url(images/c.jpg);">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
-                <div class="text w-100 text-center">
-                  
-		            <h4 >O pôr do sol é um eufemismo para a morte. A partir de um banco de dados de fotos autorais e do uso de eyetracking, manipulamos as imagens de um modo poético e crítico para proporcionar aos interatores uma experiência de pôr do sol para cada espécie criada para o abate. O trabalho está sintonizado com o autor Garry Francione, que luta pela abolição animal.</h4>
-                        </div>
-	        </div>
+
+
+        <div class="nav-links">
+
+
+            <a
+                href="bovinos.html"
+                target="_blank"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/cow.png"
+                    width="30"
+                    alt="Bovinos"
+                >
+
+            </a>
+
+
+            <a
+                href="galinhas.html"
+                target="_blank"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/chicken.png"
+                    width="30"
+                    alt="Galinhas"
+                >
+
+            </a>
+
+
+            <a
+                href="porcos.html"
+                target="_blank"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/pig.png"
+                    width="30"
+                    alt="Porcos"
+                >
+
+            </a>
+
+
+            <a
+                href="cavalos.html"
+                target="_blank"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/horse.png"
+                    width="30"
+                    alt="Cavalos"
+                >
+
+            </a>
+
+
+            <a
+                href="coelhos.html"
+                target="_blank"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/rabbit.png"
+                    width="30"
+                    alt="Coelhos"
+                >
+
+            </a>
+
+
+            <a
+                href="ovelhas.html"
+                target="_blank"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/sheep.png"
+                    width="30"
+                    alt="Ovelhas"
+                >
+
+            </a>
+
+
+            <a
+                href="compartilhado.html"
+                style="
+                    font-size: 14px;
+                    font-family: 'Rubik', sans-serif;
+                    font-weight: 500;
+                "
+            >
+                COMPARTILHADO
+            </a>
+
+
         </div>
-      </div>
-            
-               <div class="slider-item js-fullheight" style="background-image:url(images/12.jpg);">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
-                <div class="text w-100 text-center">
-                  
-		            <h4 >Calibre o eyetracker no link <a href= https://webgazer.cs.brown.edu/calibration.html target="_blank"> CALIBRAR </a></h4>
-                        </div>
-	        </div>
-        </div>
-      </div>
-            
-     <div class="slider-item js-fullheight" style="background-image:url(images/15.jpg);">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
-              <div class="text w-100 text-center">
-		            <h4 >Um projeto da Profa. Dra. Débora Aita Gasparetto. Publicitária, Mestre e Doutora em Arte Visuais, Professora junto ao Departamento de Desenho Industrial da UFSM. <a href= http://lattes.cnpq.br/1722113830390578 target="_blank"> Acesse outros trabalhos relacionados.</a></h4>
-                        </div>
-	        </div>
-        </div>
-                      
-      </div>
-            
-            
-             
+
     </div>
 
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/main.js"></script>
-          <script src="js/menu.js"></script>
 
-    
-    </body>
+    <!-- =========================================================
+         CONTEÚDO
+    ========================================================== -->
+
+    <main class="sobre-page">
+
+
+        <article class="sobre-content">
+
+
+            <div class="sobre-label">
+
+                SOBRE A OBRA
+
+            </div>
+
+
+
+            <h1 class="sobre-title">
+
+                O pôr do sol das
+
+                <span>
+                    paisagens perdidas
+                </span>
+
+            </h1>
+
+
+
+            <div class="sobre-date">
+
+                2023 — 2026
+
+            </div>
+
+
+
+            <div class="sobre-text">
+
+
+                <p>
+
+                    Mudam os governos, mas o abolicionismo animal
+                    continua à margem das discussões. A criação de
+                    animais para o abate é um dos principais problemas
+                    da crise ambiental que vivemos, assim como das
+                    crises sanitárias.
+
+                </p>
+
+
+                <p>
+
+                    O confinamento e a exploração de vidas sencientes
+                    e o seu pôr do sol são enfatizados neste trabalho,
+                    que busca compreender o funcionamento do olho de
+                    vacas, porcos, galinhas, ovelhas, coelhos e cavalos
+                    e simula o seu modo de ver a paisagem.
+
+                </p>
+
+
+
+                <div class="sobre-highlight">
+
+                    <p>
+
+                        O pôr do sol é um eufemismo para a morte.
+
+                    </p>
+
+                </div>
+
+
+
+                <p>
+
+                    A partir de um banco de dados de fotos autorais e
+                    do uso de eyetracking, manipulamos as imagens de
+                    um modo poético e crítico para proporcionar aos
+                    interatores uma experiência de pôr do sol para
+                    cada espécie criada para o abate.
+
+                </p>
+
+
+                <p>
+
+                    O trabalho está sintonizado com o autor
+                    Garry Francione, que luta pela abolição animal.
+
+                </p>
+
+
+
+                <div class="sobre-actions">
+
+
+                    <a
+                        class="sobre-button"
+                        href="https://webgazer.cs.brown.edu/calibration.html"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+
+                        CALIBRAR EYETRACKER
+
+                    </a>
+
+
+                    <a
+                        class="sobre-button"
+                        href="http://lattes.cnpq.br/1722113830390578"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+
+                        OUTROS TRABALHOS
+
+                    </a>
+
+
+                </div>
+
+
+
+                <p>
+
+                    Um projeto da Profa. Dra. Débora Aita Gasparetto,
+                    publicitária, Mestre e Doutora em Artes Visuais e
+                    professora junto ao Departamento de Desenho
+                    Industrial da Universidade Federal de Santa Maria.
+
+                </p>
+
+
+
+                <a
+                    class="sobre-back"
+                    href="index.html"
+                >
+
+                    ← voltar para a paisagem
+
+                </a>
+
+
+            </div>
+
+        </article>
+
+    </main>
+
+
+</body>
+
 </html>
-      
