@@ -1,165 +1,1257 @@
 <!doctype html>
-<html lang="pt">
-  <head>
-  	<title>Paisagens Perdidas</title>
+
+<html lang="pt-BR">
+
+<head>
+
+    <title>Sobre — O pôr do sol das paisagens perdidas</title>
+
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,500&display=swap" rel="stylesheet">      
-	<link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css">
-		<link rel="stylesheet" href="css/style.css">
-     		<link rel="stylesheet" href="css/menu.css">
-      <link rel="shortcut icon" href="images/icons/loguinho.png" type="image/x-icon" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
 
 
+    <!-- =========================================================
+         FONTE
+    ========================================================== -->
 
-<style>
-#animal-vision-overlay {
-  position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  pointer-events: none;
-  z-index: 999998;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  mask-image: radial-gradient(circle 100px at var(--x, 50%) var(--y, 50%), transparent 0%, transparent 100px, black 101px);
-  -webkit-mask-image: radial-gradient(circle 100px at var(--x, 50%) var(--y, 50%), transparent 0%, transparent 100px, black 101px);
-}
-#webgazerGazeDot {
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-</style>
-  </head>
-  <body>
-    <div id="animal-vision-overlay"></div>
-   <div class="nav">
-  <input type="checkbox" id="nav-check">
-  <div class="nav-header">
-    <div class="nav-title"><a href="index.html">
-LUTO  </a>  </div>
-  </div>
-  <div class="nav-btn">
-    <label for="nav-check">
-      <span></span>
-      <span></span>
-      <span></span>
-    </label>
-  </div>
-  <div class="nav-links">
-    <a href="bovinos.html" target="_blank"><img class="icons" src="images/icons/cow.png" width="30px"heigth="auto";></a>
-    <a href="galinhas.html" target="_blank"><img class="icons" src="images/icons/chicken.png" width="30px"heigth="auto";></a>
-    <a href="porcos.html" target="_blank"><img class="icons" src="images/icons/pig.png" width="30px"heigth="auto";></a>
-    <a href="cavalos.html" target="_blank"><img class="icons" src="images/icons/horse.png" width="30px"heigth="auto";></a>
-    <a href="coelhos.html" target="_blank"><img class="icons" src="images/icons/rabbit.png" width="30px"heigth="auto";></a>
-    <a href="ovelhas.html" target="_blank"><img class="icons" src="images/icons/sheep.png" width="30px"heigth="auto";></a>
-    <a href="compartilhado.html" style="font-size: 14px; font-family: 'Rubik', sans-serif; font-weight: 500; vertical-align: middle;">COMPARTILHADO</a>
-    <a href="sobre.html" target="_blank">Sobre</a>
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,500&display=swap"
+        rel="stylesheet"
+    >
 
 
-  </div>
-</div>
-       
-      
-		<div class="home-slider owl-carousel js-fullheight">
-      <div class="slider-item js-fullheight" style="background-image:url(images/1.jpg);">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
-	          <div class="col-md-12 ftco-animate">
-	          	<div class="text w-100 text-center">
+    <!-- =========================================================
+         MENU
+    ========================================================== -->
 
-                  
+    <link
+        rel="stylesheet"
+        href="css/menu.css"
+    >
 
-	          		<h1>Sobre</h1>
-                  
-		            <h4 >Mudam os governos, mas o abolicionismo animal continua à margem das discussões. A criação de animais para o abate é um dos principais problemas da crise ambiental que vivemos, assim como das crises sanitárias. O confinamento e a exploração de vidas sencientes e o seu pôr do sol são enfatizados neste trabalho, que busca compreender o funcionamento do olho de vacas, porcos, galinhas, ovelhas, coelhos e cavalos e simula o seu modo de ver a paisagem.</h4>
-                        </div>
- 
-	          </div>
-	        </div>
+
+    <!-- =========================================================
+         FAVICON
+    ========================================================== -->
+
+    <link
+        rel="shortcut icon"
+        href="images/icons/loguinho.png"
+        type="image/x-icon"
+    >
+
+
+    <!-- =========================================================
+         CSS DA PÁGINA SOBRE
+    ========================================================== -->
+
+    <style>
+
+        :root {
+            --sunset-pink: #C85A78;
+            --sunset-ochre: #D89A3D;
+            --text-color: #ffffff;
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+
+        body {
+            font-family: 'Rubik', sans-serif;
+
+            color: var(--text-color);
+
+            background: #000;
+        }
+
+
+        /* ========================================================
+           FUNDO FIXO
+        ======================================================== */
+
+        .sobre-background {
+            position: fixed;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background-image:
+                url('images/c.jpg');
+
+            background-size:
+                cover;
+
+            background-position:
+                center center;
+
+            background-repeat:
+                no-repeat;
+
+            z-index:
+                -3;
+        }
+
+
+        .sobre-background::after {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(0, 0, 0, 0.90) 0%,
+                    rgba(0, 0, 0, 0.82) 34%,
+                    rgba(0, 0, 0, 0.62) 62%,
+                    rgba(0, 0, 0, 0.35) 100%
+                );
+        }
+
+
+        /* ========================================================
+           CONTEÚDO
+        ======================================================== */
+
+        .sobre-page {
+            min-height: 100vh;
+
+            padding:
+                9vh
+                8vw
+                140px
+                8vw;
+        }
+
+
+        .sobre-content {
+            width: min(820px, 100%);
+        }
+
+
+        /* ========================================================
+           CABEÇALHO
+        ======================================================== */
+
+        .sobre-label {
+            display: inline-block;
+
+            margin-bottom: 24px;
+
+            color: var(--sunset-ochre);
+
+            font-size: 0.78rem;
+
+            font-weight: 600;
+
+            letter-spacing: 0.18em;
+
+            text-transform: uppercase;
+        }
+
+
+        .sobre-title {
+            margin: 0;
+
+            max-width: 820px;
+
+            font-size:
+                clamp(
+                    3rem,
+                    6.4vw,
+                    6.6rem
+                );
+
+            font-weight: 500;
+
+            line-height: 0.95;
+
+            letter-spacing: -0.052em;
+        }
+
+
+        .sobre-title span {
+            display: block;
+
+            color: var(--sunset-pink);
+        }
+
+
+        .sobre-date {
+            margin-top: 24px;
+
+            margin-bottom: 64px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.72
+                );
+
+            font-size: 0.95rem;
+
+            font-weight: 400;
+
+            letter-spacing: 0.12em;
+        }
+
+
+        /* ========================================================
+           TEXTO
+        ======================================================== */
+
+        .sobre-text {
+            max-width: 760px;
+        }
+
+
+        .sobre-text p {
+            margin:
+                0
+                0
+                28px
+                0;
+
+            font-size:
+                clamp(
+                    1.02rem,
+                    1.35vw,
+                    1.22rem
+                );
+
+            font-weight: 300;
+
+            line-height: 1.78;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.95
+                );
+        }
+
+
+        .sobre-text em {
+            font-style: italic;
+        }
+
+
+        .sobre-text strong {
+            font-weight: 600;
+        }
+
+
+        /* ========================================================
+           FRASES DE RITMO
+        ======================================================== */
+
+        .frase-curta {
+            margin:
+                46px
+                0;
+
+            font-size:
+                clamp(
+                    1.55rem,
+                    2.5vw,
+                    2.6rem
+                );
+
+            line-height: 1.25;
+
+            font-weight: 500;
+
+            letter-spacing: -0.02em;
+
+            color: #ffffff;
+        }
+
+
+        .frase-curta.rosa {
+            color: var(--sunset-pink);
+        }
+
+
+        .frase-curta.ocre {
+            color: var(--sunset-ochre);
+        }
+
+
+        /* ========================================================
+           BLOCO EYE TRACKING
+        ======================================================== */
+
+        .eyetracking-block {
+            margin:
+                52px
+                0
+                62px
+                0;
+
+            padding:
+                30px
+                0
+                10px
+                24px;
+
+            border-left:
+                3px solid
+                var(--sunset-ochre);
+        }
+
+
+        .eyetracking-block p {
+            margin-bottom: 22px;
+        }
+
+
+        .eyetracking-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 50px;
+
+            padding:
+                0
+                24px;
+
+            border:
+                1px solid
+                var(--sunset-ochre);
+
+            border-radius:
+                100px;
+
+            background-color:
+                var(--sunset-ochre);
+
+            color:
+                #000000;
+
+            text-decoration:
+                none;
+
+            font-size:
+                0.88rem;
+
+            font-weight:
+                600;
+
+            letter-spacing:
+                0.04em;
+
+            transition:
+                color 0.25s ease,
+                background-color 0.25s ease,
+                border-color 0.25s ease,
+                transform 0.25s ease;
+        }
+
+
+        .eyetracking-button:hover {
+            background-color:
+                var(--sunset-pink);
+
+            border-color:
+                var(--sunset-pink);
+
+            color:
+                #ffffff;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        .eyetracking-note {
+            margin-top: 13px !important;
+
+            font-size: 0.88rem !important;
+
+            line-height: 1.5 !important;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.64
+                ) !important;
+        }
+
+
+        /* ========================================================
+           FRASES FINAIS
+        ======================================================== */
+
+        .final-statements {
+            margin:
+                75px
+                0;
+
+            padding:
+                42px
+                0;
+
+            border-top:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.22
+                );
+
+            border-bottom:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.22
+                );
+        }
+
+
+        .final-statements p {
+            margin:
+                0
+                0
+                16px
+                0;
+
+            font-size:
+                clamp(
+                    1.7rem,
+                    3vw,
+                    3.3rem
+                );
+
+            line-height: 1.15;
+
+            font-weight: 500;
+
+            letter-spacing: -0.035em;
+        }
+
+
+        .final-statements p:first-child {
+            color:
+                var(--sunset-ochre);
+        }
+
+
+        .final-statements p:last-child {
+            margin-bottom: 0;
+
+            color:
+                var(--sunset-pink);
+        }
+
+
+        /* ========================================================
+           VOLTAR
+        ======================================================== */
+
+        .sobre-back {
+            display: inline-block;
+
+            margin-top: 54px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.72
+                );
+
+            font-size: 0.9rem;
+
+            text-decoration: none;
+
+            transition:
+                color 0.25s ease;
+        }
+
+
+        .sobre-back:hover {
+            color:
+                var(--sunset-pink);
+        }
+
+
+        /* ========================================================
+           MOBILE
+        ======================================================== */
+
+        @media (max-width: 700px) {
+
+            .sobre-background {
+                background-position:
+                    62% center;
+            }
+
+
+            .sobre-background::after {
+                background:
+                    linear-gradient(
+                        180deg,
+                        rgba(0, 0, 0, 0.70) 0%,
+                        rgba(0, 0, 0, 0.86) 42%,
+                        rgba(0, 0, 0, 0.97) 100%
+                    );
+            }
+
+
+            .sobre-page {
+                padding:
+                    9vh
+                    24px
+                    120px
+                    24px;
+            }
+
+
+            .sobre-title {
+                font-size:
+                    clamp(
+                        3rem,
+                        14vw,
+                        5rem
+                    );
+            }
+
+
+            .sobre-date {
+                margin-bottom: 46px;
+            }
+
+
+            .frase-curta {
+                margin:
+                    38px
+                    0;
+            }
+
+
+            .eyetracking-block {
+                margin:
+                    42px
+                    0
+                    52px
+                    0;
+
+                padding-left:
+                    18px;
+            }
+
+
+            .eyetracking-button {
+                width: 100%;
+            }
+
+
+            .final-statements {
+                margin:
+                    60px
+                    0;
+
+                padding:
+                    32px
+                    0;
+            }
+
+        }
+
+
+        /* ========================================================
+           ACESSIBILIDADE
+        ======================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .eyetracking-button,
+            .sobre-back {
+                transition: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+    <!-- =========================================================
+         FUNDO
+    ========================================================== -->
+
+    <div
+        class="sobre-background"
+        aria-hidden="true"
+    ></div>
+
+
+
+    <!-- =========================================================
+         NAV
+    ========================================================== -->
+
+    <div class="nav">
+
+        <input
+            type="checkbox"
+            id="nav-check"
+        >
+
+
+        <div class="nav-header">
+
+            <div class="nav-title">
+
+                <a href="index.html">
+                    SOBRE
+                </a>
+
+            </div>
+
         </div>
-      </div>
-      <div class="slider-item js-fullheight" style="background-image:url(images/c.jpg);">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
-              	<div class="text w-100 text-center">
-                  
-		            <h4 >O pôr do sol é um eufemismo para a morte. A partir de um banco de dados de fotos autorais e do uso de eyetracking, manipulamos as imagens de um modo poético e crítico para proporcionar aos interatores uma experiência de pôr do sol para cada espécie criada para o abate. O trabalho está sintonizado com o autor Garry Francione, que luta pela abolição animal.</h4>
-                        </div>
-	        
-	        </div>
-        </div>
-      </div>
 
-      <div class="slider-item js-fullheight" style="background-image:url(images/b.jpg);">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
-	       <div class="text w-100 text-center">
-                  
-		            <h4 >Calibre o eyetracker no link <a href= https://webgazer.cs.brown.edu/calibration.html target="_blank"> CALIBRAR </a></h4>
-                        </div>
-	        </div>
-        </div>
-      </div>
-               <div class="slider-item js-fullheight" style="background-image:url(images/24.jpg);">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
-	<div class="text w-100 text-center">
-                  
-		            <h4 >Um projeto de <a href= http://lattes.cnpq.br/1722113830390578 target="_blank"> Débora Aita Gasparetto </a></h4>
-                        </div>
-	        </div>
-        </div>
-      </div>
-            
-               <div class="slider-item js-fullheight" style="background-image:url(images/d.jpg);">
-      	<div class="overlay"></div>
-        <div class="container">
-          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
 
-	        </div>
+        <div class="nav-btn">
+
+            <label for="nav-check">
+
+                <span></span>
+
+                <span></span>
+
+                <span></span>
+
+            </label>
+
         </div>
-      </div>
-            
-    
-            
-             
+
+
+        <div class="nav-links">
+
+
+            <a
+                href="bovinos.html"
+                target="_blank"
+                aria-label="Bovinos"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/cow.png"
+                    width="30"
+                    alt="Bovinos"
+                >
+
+            </a>
+
+
+            <a
+                href="galinhas.html"
+                target="_blank"
+                aria-label="Galinhas"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/chicken.png"
+                    width="30"
+                    alt="Galinhas"
+                >
+
+            </a>
+
+
+            <a
+                href="porcos.html"
+                target="_blank"
+                aria-label="Porcos"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/pig.png"
+                    width="30"
+                    alt="Porcos"
+                >
+
+            </a>
+
+
+            <a
+                href="cavalos.html"
+                target="_blank"
+                aria-label="Cavalos"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/horse.png"
+                    width="30"
+                    alt="Cavalos"
+                >
+
+            </a>
+
+
+            <a
+                href="coelhos.html"
+                target="_blank"
+                aria-label="Coelhos"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/rabbit.png"
+                    width="30"
+                    alt="Coelhos"
+                >
+
+            </a>
+
+
+            <a
+                href="ovelhas.html"
+                target="_blank"
+                aria-label="Ovelhas"
+            >
+
+                <img
+                    class="icons"
+                    src="images/icons/sheep.png"
+                    width="30"
+                    alt="Ovelhas"
+                >
+
+            </a>
+
+
+            <a
+                href="compartilhado.html"
+                style="
+                    font-size: 14px;
+                    font-family: 'Rubik', sans-serif;
+                    font-weight: 500;
+                "
+            >
+                COMPARTILHADO
+            </a>
+
+        </div>
+
     </div>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="webgazer.js" type="text/javascript" >
-      </script>
 
-    <script>
-   window.localStorage.clear(); if(window.localforage){window.localforage.clear();}
-   webgazer.setGazeListener(function(data, elapsedTime) {
-	if (data == null) {
-		return;
-	}
-	var xprediction = data.x;
-	var yprediction = data.y;
-    var overlay = document.getElementById('animal-vision-overlay');
-    if (overlay) {
-        overlay.style.setProperty('--x', xprediction + 'px');
-        overlay.style.setProperty('--y', yprediction + 'px');
-    }
-}).begin();
 
-      
-     </script>
-      
-          
-    </body>
+    <!-- =========================================================
+         CONTEÚDO
+    ========================================================== -->
+
+    <main class="sobre-page">
+
+
+        <article class="sobre-content">
+
+
+            <div class="sobre-label">
+                SOBRE A OBRA
+            </div>
+
+
+            <h1 class="sobre-title">
+
+                O pôr do sol das
+
+                <span>
+                    paisagens perdidas
+                </span>
+
+            </h1>
+
+
+            <div class="sobre-date">
+                2023 — 2026
+            </div>
+
+
+
+            <div class="sobre-text">
+
+
+                <p>
+
+                    <em>O pôr do sol das paisagens perdidas</em>
+                    é um projeto de Web Art iniciado em 2023 e
+                    ampliado em 2026, que investiga as relações
+                    entre paisagem, percepção, tecnologia,
+                    cultura visual, bioética e existência
+                    interespécies.
+
+                </p>
+
+
+                <p>
+
+                    O ponto de partida da obra é uma imagem
+                    aparentemente universal: o pôr do sol.
+                    Horizonte, passagem do tempo, transformação
+                    da luz, contemplação e memória encontram-se
+                    nessa paisagem repetidamente fotografada ao
+                    longo da história e, hoje, compartilhada
+                    incessantemente nas redes digitais.
+
+                </p>
+
+
+                <div class="frase-curta rosa">
+
+                    Mas essa paisagem não pertence igualmente
+                    a todos os seres.
+
+                </div>
+
+
+                <p>
+
+                    Na primeira experiência da obra, fotografias
+                    autorais de pores do sol são transformadas
+                    a partir de conhecimentos provenientes da
+                    etologia e das ciências da visão sobre os
+                    sistemas perceptivos de porcos, cavalos,
+                    galinhas, ovinos, bovinos e coelhos.
+
+                </p>
+
+
+                <p>
+
+                    Por meio de tecnologias de <em>eye tracking</em>,
+                    o movimento do olhar do visitante interfere
+                    na imagem e permite experimentar diferentes
+                    aproximações visuais da paisagem.
+
+                </p>
+
+
+
+                <!-- =================================================
+                     CALIBRAÇÃO WEBGAZER
+                ================================================== -->
+
+                <div class="eyetracking-block">
+
+                    <p>
+
+                        Antes de acessar as experiências que utilizam
+                        rastreamento do olhar, calibre o sistema
+                        WebGazer para que a interface possa acompanhar
+                        com maior precisão o movimento dos seus olhos.
+
+                    </p>
+
+
+                    <a
+                        class="eyetracking-button"
+                        href="https://webgazer.cs.brown.edu/calibration.html"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        CALIBRAR EYETRACKER
+                    </a>
+
+
+                    <p class="eyetracking-note">
+
+                        A calibração utiliza a câmera do dispositivo
+                        para estimar a direção do olhar durante a experiência.
+
+                    </p>
+
+                </div>
+
+
+
+                <p>
+
+                    A proposta não é afirmar que podemos enxergar
+                    exatamente como outro animal enxerga.
+                    Isso seria cientificamente impossível.
+
+                </p>
+
+
+                <p>
+
+                    O trabalho parte justamente desse limite para
+                    construir um exercício de imaginação
+                    interespécies: uma tentativa de deslocar,
+                    ainda que provisoriamente, a centralidade do
+                    olhar humano.
+
+                </p>
+
+
+                <p>
+
+                    Essa perspectiva encontra aproximação com o
+                    conceito de <em>Umwelt</em>, de Jakob von
+                    Uexküll, para quem cada organismo constitui
+                    um mundo perceptivo próprio em sua relação
+                    com o ambiente.
+
+                </p>
+
+
+                <p>
+
+                    Um mesmo espaço físico pode, portanto, conter
+                    diferentes mundos, definidos pelas possibilidades
+                    sensoriais e pelas relações de cada ser com
+                    aquilo que o cerca.
+
+                </p>
+
+
+                <div class="frase-curta ocre">
+
+                    Em 2026, a obra foi ampliada com uma nova
+                    experiência: O pôr do sol compartilhado.
+
+                </div>
+
+
+                <p>
+
+                    Se a primeira parte pergunta como outros animais
+                    poderiam perceber uma paisagem, a segunda
+                    volta-se para uma ação profundamente humana e
+                    contemporânea: fotografar e compartilhar o
+                    pôr do sol.
+
+                </p>
+
+
+                <p>
+
+                    A interface conecta-se a fontes abertas e redes
+                    digitais para localizar imagens relacionadas
+                    a termos e hashtags como <em>sunset</em>,
+                    <em>pôr do sol</em>, <em>atardecer</em>,
+                    <em>tramonto</em> e <em>coucher de soleil</em>.
+
+                </p>
+
+
+                <p>
+
+                    As imagens são submetidas a processos computacionais
+                    de seleção, filtragem, verificação de relevância
+                    e eliminação de duplicidades antes de integrarem
+                    a experiência.
+
+                </p>
+
+
+                <p>
+
+                    Não se trata, portanto, de reproduzir simplesmente
+                    um feed de rede social. O sistema constrói uma
+                    curadoria computacional baseada em regras,
+                    combinando diferentes fontes e critérios para
+                    formar, a cada acesso, uma constelação parcialmente
+                    diferente de paisagens.
+
+                </p>
+
+
+                <div class="frase-curta rosa">
+
+                    O arquivo nunca é exatamente o mesmo.
+
+                </div>
+
+
+                <p>
+
+                    As imagens encontradas são reorganizadas em uma
+                    timeline contínua.
+
+                </p>
+
+
+                <p>
+
+                    Conforme o visitante avança pelo <em>scroll</em>,
+                    entretanto, algo começa a acontecer: a luminosidade
+                    diminui progressivamente.
+
+                </p>
+
+
+                <div class="frase-curta">
+
+                    O processo é inicialmente quase imperceptível.
+
+                </div>
+
+
+                <div class="frase-curta">
+
+                    A paisagem perde luz.
+
+                </div>
+
+
+                <div class="frase-curta">
+
+                    As cores desaparecem.
+
+                </div>
+
+
+                <div class="frase-curta">
+
+                    As imagens tornam-se cada vez menos visíveis.
+
+                </div>
+
+
+                <div class="frase-curta rosa">
+
+                    Até que o fluxo de pores do sol termina
+                    completamente no preto.
+
+                </div>
+
+
+                <p>
+
+                    A lógica habitual do <em>scroll</em> infinito
+                    é, assim, invertida.
+
+                </p>
+
+
+                <p>
+
+                    Nas plataformas digitais, cada movimento promete
+                    uma nova imagem. Aqui, cada movimento aproxima
+                    o visitante do desaparecimento.
+
+                </p>
+
+
+                <div class="frase-curta ocre">
+
+                    A abundância transforma-se em ausência.
+
+                </div>
+
+
+                <p>
+
+                    Esse percurso constitui aquilo que o projeto
+                    compreende como um <strong>arquivo em
+                    desaparecimento</strong>: um arquivo coletivo,
+                    variável e temporário que não procura preservar
+                    indefinidamente aquilo que apresenta.
+
+                </p>
+
+
+                <p>
+
+                    Quanto mais avançamos sobre as imagens, menos
+                    podemos vê-las.
+
+                </p>
+
+
+                <p>
+
+                    A obra aproxima, dessa maneira, dois movimentos
+                    aparentemente contraditórios da cultura
+                    contemporânea: nunca produzimos e compartilhamos
+                    tantas imagens da natureza e, simultaneamente,
+                    nunca transformamos tão intensamente as condições
+                    que permitem que humanos e outros animais
+                    experimentem essas mesmas paisagens.
+
+                </p>
+
+
+                <p>
+
+                    O pôr do sol torna-se também uma espécie de
+                    <strong>vanitas contemporânea</strong>.
+
+                </p>
+
+
+                <p>
+
+                    Se a tradição da <em>vanitas</em> utilizava
+                    objetos e imagens para recordar a passagem do
+                    tempo e a finitude da existência, aqui é a
+                    própria luz que desaparece.
+
+                </p>
+
+
+                <p>
+
+                    Entretanto, para os animais submetidos ao
+                    confinamento, à exploração e à experimentação,
+                    a perda da paisagem pode acontecer muito antes
+                    da morte.
+
+                </p>
+
+
+                <div class="frase-curta rosa">
+
+                    Para alguns seres, morrer significa também
+                    deixar uma existência na qual o horizonte
+                    já havia desaparecido.
+
+                </div>
+
+
+                <p>
+
+                    Por isso, as paisagens perdidas não são
+                    necessariamente paisagens que deixaram de existir.
+
+                </p>
+
+
+                <p>
+
+                    São também aquelas que continuam existindo sem
+                    poder ser experimentadas por aqueles para quem
+                    o horizonte foi substituído por paredes, grades,
+                    baias, galpões e laboratórios.
+
+                </p>
+
+
+                <p>
+
+                    Ao final do percurso, quando nenhuma imagem
+                    permanece visível, restam apenas duas frases:
+
+                </p>
+
+
+
+                <div class="final-statements">
+
+                    <p>
+
+                        Suas escolhas podem salvar paisagens.
+
+                    </p>
+
+
+                    <p>
+
+                        E também aqueles que jamais puderam contemplá-las.
+
+                    </p>
+
+                </div>
+
+
+
+                <p>
+
+                    <em>O pôr do sol das paisagens perdidas</em>
+                    não procura reconstruir o olhar dos outros
+                    animais nem oferecer respostas definitivas
+                    sobre como devemos nos relacionar com eles.
+
+                </p>
+
+
+                <p>
+
+                    A obra propõe outra coisa:
+
+                </p>
+
+
+                <div class="frase-curta ocre">
+
+                    interromper, por alguns instantes, a certeza
+                    de que o mundo existe apenas da maneira como
+                    nós o vemos.
+
+                </div>
+
+
+
+                <a
+                    class="sobre-back"
+                    href="index.html"
+                >
+                    ← voltar para a paisagem
+                </a>
+
+
+            </div>
+
+        </article>
+
+    </main>
+
+
+</body>
+
 </html>
-      
